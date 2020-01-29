@@ -1,19 +1,15 @@
 version: 2
-jobs:
-  -pr_check
-  build:
-    docker:
-      - image: circleci/node:8.10.0
-    steps:
-      - checkout
-      - run: <command>
-  test:
-    docker:
-      - image: circleci/node:8.10.0
-    steps:
-      - checkout
-      - run: npm install
-      - run: npm test
+pr-check-workflows:
+  jobs:
+    - pr_check
+    build:
+      docket:
+        - image: circleci/node:8.10.0
+      steps:
+        -checkout
+        - run: npm install
+        - run: npm test
+
 workflows:
   version: 2
   build_and_test:
