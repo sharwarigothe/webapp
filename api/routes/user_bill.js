@@ -115,11 +115,14 @@ const bill={
                        else if(bill.paymentStatus === undefined){
                         res.status(400).json({error: "paymentStatus empty"});
                        }
+                    //    else if(bill.paymentStatus != myEnum){
+                    //        res.status(400).json({error: "Invalid paymentstatus"});
+                    //    }
 
                     //    else if(bill.paymentStatus != "paid" || bill.paymentStatus != "due"){
                     //     res.status(400).json({error: "payment status not paid or due"});
                     //    }
-                       else{
+                       else if(bill.paymentStatus == "paid" || bill.paymentStatus == "due" || bill.paymentStatus == "past_due" || bill.paymentStatus == "no_payment_required"){
                        
                        db.query("INSERT INTO Bill (id, created_ts, updated_ts, owner_id, vendor, bill_date, due_date, amount_due, categories, paymentStatus) VALUES ('"+id+"','"+created_ts+"','"+updated_ts+"','"+uuid+"','"+bill.vendor+"','"+bill.bill_date+"','"+bill.due_date+"','"+bill.amount_due+"','"+stringObj+"','"+bill.paymentStatus+"')",function(error,ress){
                         console.log(ress);
@@ -155,6 +158,9 @@ const bill={
                         });
                     }
                     });
+                }
+                else{
+                    res.status(400).json({error: "Enter valid payment status"});
                 }
                     }
                     else{
@@ -503,8 +509,12 @@ var updated_ts = timestamp;
                                else if(!bill.vendor || !bill.bill_date || !bill.due_date || !bill.amount_due || !bill.categories || !bill.paymentStatus){
                                 res.status(400).json({error: "Please enter required fields"});
                             }
+                            
+
 
                             else if(ress.length>0){
+
+                                if(bill.paymentStatus == "paid" || bill.paymentStatus == "due" || bill.paymentStatus == "past_due" || bill.paymentStatus == "no_payment_required"){
                                 db.query("UPDATE Bill SET  updated_ts='"+updated_ts+"',vendor='"+bill.vendor+"',bill_date='"+bill.bill_date+"',due_date='"+bill.due_date+"',amount_due='"+bill.amount_due+"',categories='"+stringObj+"',paymentStatus='"+bill.paymentStatus+"' where id = '"+id+"'",function (error,resulte){
                                     //var ownerid = ress[0].owner_id;
                             
@@ -531,6 +541,10 @@ var updated_ts = timestamp;
                                   
           
                                 });
+                            }
+                            else{
+                                res.status(400).json({error: "Enter valid payment status"});
+                            }
                             }
                             else{
                                 res.status(404).json({error: "Bill not found"});
