@@ -1,33 +1,12 @@
-version: 2
-pr-check-workflows:
-  jobs:
-    - pr_check
-    build:
-      docket:
-        - image: circleci/node:8.10.0
-      steps:
-        -checkout
-        - run: npm install
-        - run: npm test
-
 workflows:
   version: 2
-  build_and_test:
+  pr-check-workflow:
     jobs:
-      - build
-      - test
       - pr_check
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
