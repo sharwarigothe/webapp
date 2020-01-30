@@ -6,9 +6,7 @@ jobs:
       - image: circleci/node:8.10.0
       - image: circleci/mysql:8.0.4
         environment:
-     #     MYSQL_DATABASE: UserDetails
-     #     MYSQL_USER: sharwari
-     #     MYSQL_PASSWORD: password
+   
     steps:
       - checkout
       - run: npm install
@@ -19,9 +17,7 @@ jobs:
       - image: circleci/node:8.10.0
       - image: circleci/mysql:8.0.4
         environment:
-      #    MYSQL_DATABASE: UserDetails
-      #    MYSQL_USER: sharwari
-      #    MYSQL_PASSWORD: password
+      
     steps:
       - checkout
       - run: npm install
