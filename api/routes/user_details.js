@@ -272,10 +272,11 @@ router.get('/self', function(req, res, next) {
                                
                              
                              const account_updated = timestamp; 
-                             //const id=req.params.id;
+                             
                              const first_name = req.body.first_name;
                              const last_name = req.body.last_name;
                              const password = req.body.password;
+                             const email_address=req.body.email_address;
                             
                                                 
                                     const passregex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
@@ -290,7 +291,7 @@ router.get('/self', function(req, res, next) {
                                                 json({ messege:"please enter all the fields",});
                                                  }
                                 
-                                    else{
+                                    else if(email_address == usernameREQ){
                                         bcrypt.hash(password,saltRounds,function(err,hash){
                                             db.query( `UPDATE user_details SET first_name ="${first_name}", last_name = "${last_name}",password = "${hash}", account_updated = "${account_updated}"  WHERE email_address = "${usernameREQ}"`,function(error, results1){
                                            
@@ -301,13 +302,14 @@ router.get('/self', function(req, res, next) {
                                                    // console.log(error, results);
                                                     
                                                      res.status(200).json({
-                                                             messege:"User Updated successfully",
+                                                             message:"User Updated successfully",
                                                          
 
                                                            
-                                                                //EMAIL: results[0].email_address,
+                                                               
                                                                 first_name: first_name,
                                                                 LAST_NAME: last_name,
+                                                                EMAIL: results[0].email_address,
                                                                 Created_Time: results[0].account_created,
                                                                 Updated_Time:account_updated
                                
@@ -321,6 +323,9 @@ router.get('/self', function(req, res, next) {
           
                                                     });
         
+                                        }
+                                        else{
+                                            res.status(400).json({error: "Email addresses should match"});
                                         }
                              }
                              else{
