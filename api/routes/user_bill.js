@@ -301,14 +301,14 @@ router.get("/",function(req,res){
                             else{
                                 //var resultJson = JSON.stringify(resulte);
                                 //console.log(resulte);
-                                var jsonobj = resulte;
-                                console.log(jsonobj);
-                                jsonobj2 = JSON.stringify(jsonobj);
-
+                                // var jsonobj = resulte;
+                                // console.log(jsonobj);
+                            //    jsonobj2 = JSON.stringify(resulte);
+                        
                                // console.log(resulte.rows);
                                 //console.log(resultJson);
                                 
-                            
+                                console.log(resulte);
                                 res.status(200).json({message:"all values",
                                 
 
