@@ -13,21 +13,6 @@ jobs:
       - checkout
       - run: npm install
       - run: npm test
-      
-jobs:
-  pr_check:
-    working_directory: ~/webapp
-    docker:
-      - image: circleci/node:8.10.0
-      - image: circleci/mysql:8.0.4
-        environment:
-          MYSQL_DATABASE: UserDetails
-          MYSQL_USER: sharwari
-          MYSQL_PASSWORD: password
-    steps:
-      - checkout
-      - run: npm install
-      - run: npm test
   build:
     working_directory: ~/webapp
     docker:
@@ -41,6 +26,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm test
+
 workflows:
   version: 2
   pr-check-workflow:

@@ -312,7 +312,7 @@ router.get("/",function(req,res){
                                 res.status(200).json({message:"all values",
                                 
 
-                                            data : jsonobj2
+                                            data : resulte
                                             // created_ts: resulte.created_ts,
                                             // updated_ts: resulte.updated_ts,
                                             // owner_id: resulte.owner_id,
