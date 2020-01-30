@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  pr-check:
+  pr_check:
     working_directory: ~/webapp
     docker:
       - image: circleci/node:8.10.0
@@ -31,6 +31,6 @@ workflows:
   pr-check-workflow:
     jobs:
     - pr_check
-  #build-deploy-workflow:
-  #  jobs:
-  #  - build
+  build-deploy-workflow:
+    jobs:
+    - build
