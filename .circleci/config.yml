@@ -26,6 +26,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm test
+
 workflows:
   version: 2
   pr-check-workflow:
