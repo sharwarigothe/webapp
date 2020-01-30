@@ -12,7 +12,6 @@ jobs:
         MYSQL_USER: sharwari
         MYSQL_PASSWORD: password
 
-
     steps:
       - checkout
 
