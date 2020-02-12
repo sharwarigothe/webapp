@@ -585,7 +585,7 @@ const storage = multer.diskStorage({
         cb(null,'./uploads')
     },
     filename: function(req,file,cb){
-        cb(null, file.originalname);
+        cb(null,new Date().toString()+ file.originalname);
     }
 })
 const fileFilter = (req,file,cb)=>{
@@ -596,9 +596,11 @@ const fileFilter = (req,file,cb)=>{
         cb(new Error('invalid mime type, only jpeg and png are accepted'),false);
     }
 }
+
 var upload = multer({storage: storage, fileFilter : fileFilter});
 
 router.post("/:id/file",upload.single('BillFile'),function(req, res){
+    
   //console.log(req.file);
   var meta_data = JSON.stringify(req.file);
 
@@ -623,7 +625,7 @@ const timestamp=(year + "-" + month + "-" + date);
 console.log(timestamp); 
 var uploadDate = timestamp;
 
-const singleupload = upload.single('BillFile');
+
 
     if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0){
         var header = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString();
@@ -657,14 +659,7 @@ const singleupload = upload.single('BillFile');
                             else if(resulte[0].owner_id == results[0].id){  
                                 const fileId = uuidv1();
 
-                                singleupload(req, res, function(err){
-                                    if(err){
-                                        return res.status(400).send({errors:[{title:'File upload error',message: "Error in uploading. File exist"}]});
-                                    }
-                                    if(req.file.path == ''){
-                                        res.status(400).json({message:"Please select the file and send"});
-                                    }
-                                    else{
+                                    
                                         db.query("Select * from File where billid = '"+Billid+"'", function(error, billresult){
                                             if(error){
                                                 throw error;
@@ -692,9 +687,9 @@ const singleupload = upload.single('BillFile');
                                             }
                                         })
                                    
-                                }
+                                
 
-                                })
+                                
 
                                 
                           
