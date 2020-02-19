@@ -6,8 +6,6 @@ const mysql = require('mysql');
 const app = require("../../app");
 const bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
-// const saltRounds = 10;
-var Enum = require('enum');
 const multer = require('multer');
 var fs  = require('fs');
 
@@ -53,7 +51,7 @@ const fileFilter = (req,file,cb)=>{
 var upload = multer({storage: storage, fileFilter : fileFilter});
 router.post("/",(req,res,next)=>{
 
-    var myEnum = new Enum(['paid', 'due', 'past_due', 'no_payment_required']);
+   
 
     var d = new Date();
     var n = d.getMilliseconds();
@@ -140,14 +138,7 @@ const bill={
                        else if(bill.paymentStatus === undefined){
                         res.status(400).json({error: "paymentStatus empty"});
                        }
-                    //    else if(bill.paymentStatus != myEnum){
-                    //        res.status(400).json({error: "Invalid paymentstatus"});
-                    //    }
-
-                    //    else if(bill.paymentStatus != "paid" || bill.paymentStatus != "due"){
-                    //     res.status(400).json({error: "payment status not paid or due"});
-                    //    }
-
+                    
                     else if(!validdate){
                         res.status(400).json({error: "Bill_date not valid"});
                     }
@@ -169,13 +160,7 @@ const bill={
                             res.status(400).json({error: "Please enter required fields"});
                         }
 
-                        // else if(bill.paymentStatus != myEnum){
-                        //     res.status(400).json({error: "Please Enter valid paymentStatus"});
-                        // }
-                        // else if(bill.paymentStatus != "paid" || bill.paymentStatus != "due" || bill.paymentStatus != "past_due" || bill.paymentStatus != "no_payment_required"){
-                        //     res.status(400).json({message: "Please enter the correct value in paymentStatus"});
-                        // }
-                      
+                        
 
                         else{
                         res.status(200).json({message: "Bill inserted",
@@ -317,44 +302,16 @@ router.get("/",function(req,res){
                             if(error){
                                 throw error;
                             }
-                            // if(resulte[0].owner_id == results[0].id){  
-                            //     var cat = JSON.parse(resulte[0].categories);
-                            //     res.status(200).json({
-                            //         id: id,
-                            //         created_ts: resulte.created_ts,
-                            //         updated_ts: resulte.updated_ts,
-                            //         owner_id: resulte.owner_id,
-                            //         vendor: resulte.vendor,
-                            //         bill_date: resulte.bill_date,
-                            //         due_date: resulte.due_date,
-                            //         amount_due_due: resulte.amount_due_due,
-                            //         categories: cat
-                            
-                            //     })
-                            // }
+                           
                             else{
-                                //var resultJson = JSON.stringify(resulte);
-                                //console.log(resulte);
-                                // var jsonobj = resulte;
-                                // console.log(jsonobj);
-                            //    jsonobj2 = JSON.stringify(resulte);
-                        
-                               // console.log(resulte.rows);
-                                //console.log(resultJson);
+                               
                                 
                                 console.log(resulte);
                                 res.status(200).json({message:"all values",
                                 
 
                                             data : resulte
-                                            // created_ts: resulte.created_ts,
-                                            // updated_ts: resulte.updated_ts,
-                                            // owner_id: resulte.owner_id,
-                                            // vendor: resulte.vendor,
-                                            // bill_date: resulte.bill_date,
-                                            // due_date: resulte.due_date,
-                                            // amount_due_due: resulte.amount_due_due,
-                                            // categories: resulte.categories
+                                           
                                     
                                      
                             });
@@ -418,16 +375,37 @@ router.delete("/:id",(req,res)=>{
                                         throw error;
                                     }
                                     else{
+                                        db.query("SELECT * from File where billid = '"+id+"'", (error, result31) =>{
+                                            var filePath = result31[0].url;
+                                            
+                                            console.log(filePath);
+
+                                            if (fs.existsSync(filePath)) {
+                                                fs.unlinkSync(filePath);
+                                            }
+                                            else{
+                                                console.log("file already deleted from folder");
+                                                
+                                            }
                                         
+
                                         db.query("Delete from File where billid = '"+id+"'", (error, result3) =>{
+                                           
+                                            if(error){
+                                                throw error;
+                                            }
+
                                           
+                                         
                                             res.status(200).
                                         json({ messege:"Bill and Attachment DELETED SUCCESSFULLY"})
                                        
-                                        })
+                                        });
+                                    });
                                        
                                     }
                                 });
+                            
                                 
                                 
                             }
@@ -677,7 +655,15 @@ var uploadDate = timestamp;
                                             }
                                             if(billresult.length > 0){
                                                 
-                                                res.status(400).json({error: "Attachment already exists. Cannot add multiple files"})
+                                                res.status(400).json({error: "Attachment already exists. Cannot add multiple files"});
+                                                console.log(billresult[0].url);
+                                                var filePath = billresult[0].url; 
+                                                fs.unlink(filepath, function(err){
+                                                    if(err){
+                                                        throw err;
+                                                    }
+                                                    console.log("File not uploaded");
+                                                });
                                             }
                                             else if(req.path = ""){
                                                 res.status(400).json({error: "Please attach file"});
@@ -879,18 +865,37 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
                                             throw error;
                                         }
                                         else{
-                                            var filePath = fileresult[0].url; 
-                                            fs.unlinkSync(filePath);
+                                            
+                                            var filePath = fileresult[0].url;
+                                            //if(filePath.length>0){fs.unlinkSync(filePath);} 
+                                            console.log(filePath);
+                                         
+                                                // fs.unlink(filePath, function(err,result4){
+                                                //     if(err){
+                                                //         throw err;
+                                                //     }
+                                                   
+                                                    
+                                                // });
+
+                                                if (fs.existsSync(filePath)) {
+                                                    fs.unlinkSync(filePath);
+                                                }
+                                                else{
+                                                    console.log("file already deleted from folder");
+                                                    
+                                                }
+                                            
+                                           
                                         }
                                             
-                                        
+                                        console.log("file matched with bill id");
+                                        res.status(200).json({ messege:"File DELETED SUCCESSFULLY"})
                                         
     
                                     });
                                     
-                                    console.log("file matched with bill id");
-                                            res.status(200).
-                                            json({ messege:"File DELETED SUCCESSFULLY"})
+                                   
                                   }
                                   else{
                                       res.status(404).json({error: "cannot delete this file"});
