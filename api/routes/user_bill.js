@@ -9,6 +9,7 @@ var bcrypt = require('bcrypt');
 // const saltRounds = 10;
 var Enum = require('enum');
 const multer = require('multer');
+var fs  = require('fs');
 
 
 router.use(bodyParser.json());
@@ -32,6 +33,24 @@ db.connect((error) =>{
     }
 });
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null,'./uploads')
+    },
+    filename: function(req,file,cb){
+        cb(null,new Date().toString()+ file.originalname);
+    }
+})
+const fileFilter = (req,file,cb)=>{
+    if(file.mimetype ==='image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/pdf'){
+        cb(null,true)
+    }
+    else{
+        cb(new Error('invalid mime type, only  pdf, jpg, jpeg and png are accepted'),false);
+    }
+}
+
+var upload = multer({storage: storage, fileFilter : fileFilter});
 router.post("/",(req,res,next)=>{
 
     var myEnum = new Enum(['paid', 'due', 'past_due', 'no_payment_required']);
@@ -398,11 +417,19 @@ router.delete("/:id",(req,res)=>{
                                     if(error){
                                         throw error;
                                     }
-
+                                    else{
+                                        
+                                        db.query("Delete from File where billid = '"+id+"'", (error, result3) =>{
+                                          
+                                            res.status(200).
+                                        json({ messege:"Bill and Attachment DELETED SUCCESSFULLY"})
+                                       
+                                        })
+                                       
+                                    }
                                 });
-
-                                res.status(200).
-                                        json({ messege:"Bill DELETED SUCCESSFULLY"})
+                                
+                                
                             }
                             else{
                              
@@ -577,27 +604,11 @@ var updated_ts = timestamp;
     }
 });
 
+
 //POST FILE TO BILL
 
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null,'./uploads')
-    },
-    filename: function(req,file,cb){
-        cb(null,new Date().toString()+ file.originalname);
-    }
-})
-const fileFilter = (req,file,cb)=>{
-    if(file.mimetype ==='image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/pdf'){
-        cb(null,true)
-    }
-    else{
-        cb(new Error('invalid mime type, only jpeg and png are accepted'),false);
-    }
-}
 
-var upload = multer({storage: storage, fileFilter : fileFilter});
 
 router.post("/:id/file",upload.single('BillFile'),function(req, res){
     
@@ -665,7 +676,11 @@ var uploadDate = timestamp;
                                                 throw error;
                                             }
                                             if(billresult.length > 0){
+                                                
                                                 res.status(400).json({error: "Attachment already exists. Cannot add multiple files"})
+                                            }
+                                            else if(req.path = ""){
+                                                res.status(400).json({error: "Please attach file"});
                                             }
                                             else{
                                                 db.query("INSERT INTO File (file_name, id, url, upload_date, billid, metadata) values ('"+filename+"', '"+fileId+"', '"+filepath+"', '"+uploadDate+"', '"+Billid+"', '"+meta_data+"')", function(error, results){
@@ -711,7 +726,6 @@ var uploadDate = timestamp;
     }
 
 })
-
 //GET FILE
 
 router.get("/:billId/file/:fileId",function(req, res){
