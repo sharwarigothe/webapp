@@ -7,15 +7,19 @@ const app = require("../../app");
 const bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
+const host=process.env.host;
+const user = process.env.user;
+const password = process.env.password;
+
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
 
 const db = mysql.createConnection({
-    host : 'localhost',
-    user : 'sharwari',
-    password : 'password',
-    database: 'UserDetails'
+    host : host,
+    user : "dbuser",
+    password : "Csye6225password",
+    database: 'csye6225'
 });
 
 //Connect

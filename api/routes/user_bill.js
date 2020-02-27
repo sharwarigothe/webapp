@@ -8,16 +8,26 @@ const bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
 const multer = require('multer');
 var fs  = require('fs');
-
+const host=process.env.host;
+const user = process.env.user;
+const password = process.env.password;
+const awssecretaccesskey = process.env.awssecretaccesskey;
+const awsaccesskeyid = process.env.awsaccesskeyid;
+const region = process.env.region;
+const ImageS3Bucket = process.env.ImageS3Bucket;
+const aws = require('aws-sdk');
+//const multer = require('multer');
+const multerS3 = require('multer-s3');
+const s3 = new aws.S3();
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
 
 const db = mysql.createConnection({
-    host : 'localhost',
-    user : 'sharwari',
-    password : 'password',
-    database: 'UserDetails'
+    host : host,
+    user : "dbuser",
+    password : "Csye6225password",
+    database: 'csye6225'
 });
 
 //Connect
@@ -31,24 +41,26 @@ db.connect((error) =>{
     }
 });
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null,'./uploads')
-    },
-    filename: function(req,file,cb){
-        cb(null,new Date().toString()+ file.originalname);
-    }
-})
-const fileFilter = (req,file,cb)=>{
-    if(file.mimetype ==='image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/pdf'){
-        cb(null,true)
-    }
-    else{
-        cb(new Error('invalid mime type, only  pdf, jpg, jpeg and png are accepted'),false);
-    }
-}
+aws.config.update({
 
-var upload = multer({storage: storage, fileFilter : fileFilter});
+    secretAccessKey: awssecretaccesskey,
+    accessKeyId: awsaccesskeyid,
+    region: region
+});
+
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb){
+//         cb(null,'./uploads')
+//     },
+//     filename: function(req,file,cb){
+//         cb(null,new Date().toString()+ file.originalname);
+//     }
+// })
+
+
+//var upload = multer({storage: storage, fileFilter : fileFilter});
+
+
 router.post("/",(req,res,next)=>{
 
    
@@ -376,31 +388,46 @@ router.delete("/:id",(req,res)=>{
                                     }
                                     else{
                                         db.query("SELECT * from File where billid = '"+id+"'", (error, result31) =>{
-                                            var filePath = result31[0].url;
-                                            
-                                            console.log(filePath);
-
-                                            if (fs.existsSync(filePath)) {
-                                                fs.unlinkSync(filePath);
-                                            }
-                                            else{
-                                                console.log("file already deleted from folder");
-                                                
-                                            }
-                                        
-
-                                        db.query("Delete from File where billid = '"+id+"'", (error, result3) =>{
-                                           
                                             if(error){
                                                 throw error;
                                             }
+                                            else if(result31.length>0){
+                                                db.query("Delete from File where billid = '"+id+"'", (error, result3) =>{
+                                           
+                                                    if(error){
+                                                        throw error;
+                                                    }
+        
+                                                  else{
+                                                    const s3 = new aws.S3();
+                                                    var params = { Bucket: ImageS3Bucket, Key: id }
+                                                    s3.deleteObject(params, function (err, data) {
+                                                        if (err) {
+                                                            return res.send({ "error": err });
+                                                        }
+                                                      //  res.send({ data });
+                                                      res.status(200).json({ messege:"Bill and Attachment DELETED SUCCESSFULLY"})
+                                                    });
+                                                  }
+                                                 
+                                                   
+                                               
+                                                });
+                                            }
+                                            // var filePath = result31[0].url;
+                                            
+                                            // console.log(filePath);
 
-                                          
-                                         
-                                            res.status(200).
-                                        json({ messege:"Bill and Attachment DELETED SUCCESSFULLY"})
-                                       
-                                        });
+                                            // if (fs.existsSync(filePath)) {
+                                            //     fs.unlinkSync(filePath);
+                                            // }
+                                            // else{
+                                            //     console.log("file already deleted from folder");
+                                                
+                                            // }
+                                        
+
+                                        
                                     });
                                        
                                     }
@@ -485,6 +512,7 @@ var updated_ts = timestamp;
         
         
          };
+         console.log(bill.amount_due+"ffffffffffffffffffffffffffff");
          var stringObj = JSON.stringify(bill.categories);
             const id=req.params.id;
             console.log(" ID:"+id);
@@ -588,17 +616,15 @@ var updated_ts = timestamp;
 
 
 
-router.post("/:id/file",upload.single('BillFile'),function(req, res){
+router.post("/:id/file",function(req, res){
     
   //console.log(req.file);
   var meta_data = JSON.stringify(req.file);
-
+ 
   console.log(meta_data);
     const Billid = req.params.id;
 
-    const filename = req.file.originalname;
-    const filepath = req.file.path;
-
+  
     var date_ob=new Date();
     let date = ("0" + date_ob.getDate()).slice(-2);
 // // current month
@@ -614,7 +640,40 @@ const timestamp=(year + "-" + month + "-" + date);
 console.log(timestamp); 
 var uploadDate = timestamp;
 
+const fileFilter = (req,file,cb)=>{
+    if(file.mimetype ==='image/jpg' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/pdf'){
+        cb(null,true)
+    }
+    else{
+        cb(new Error('invalid mime type, only  pdf, jpg, jpeg and png are accepted'),false);
+    }
+}
 
+
+
+
+const upload = multer({
+    fileFilter,
+  storage: multerS3({
+    s3: s3,
+    bucket: ImageS3Bucket,
+    metadata: function (req, file, cb) {
+        console.log(file);
+        fileloc = JSON.stringify(file);
+       //fileloc=file;
+      cb(null, {fieldName: file.fieldname});
+    },
+     key: function (req, file, cb) {
+       cb(null, Billid)
+     }
+  })
+})
+
+
+const singleupload = upload.single('BillFile');
+
+//const filename = req.file.originalname;
+//const filepath = req.file.path;
 
     if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0){
         var header = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString();
@@ -647,7 +706,10 @@ var uploadDate = timestamp;
                             }
                             else if(resulte[0].owner_id == results[0].id){  
                                 const fileId = uuidv1();
-
+                                singleupload(req,res,function(err){
+                                    if(err){
+                                        return res.status(400).send({errors:[{title:'File upload error',detail:err.message}]});
+                                    }
                                     
                                         db.query("Select * from File where billid = '"+Billid+"'", function(error, billresult){
                                             if(error){
@@ -657,19 +719,19 @@ var uploadDate = timestamp;
                                                 
                                                 res.status(400).json({error: "Attachment already exists. Cannot add multiple files"});
                                                 console.log(billresult[0].url);
-                                                var filePath = billresult[0].url; 
-                                                fs.unlink(filepath, function(err){
-                                                    if(err){
-                                                        throw err;
-                                                    }
-                                                    console.log("File not uploaded");
-                                                });
+                                               // var filePath = billresult[0].url; 
+                                                //fs.unlink(filepath, function(err){
+                                                  //  if(err){
+                                                    //    throw err;
+                                                //     }
+                                                //     console.log("File not uploaded");
+                                                // });
                                             }
                                             else if(req.path = ""){
                                                 res.status(400).json({error: "Please attach file"});
                                             }
                                             else{
-                                                db.query("INSERT INTO File (file_name, id, url, upload_date, billid, metadata) values ('"+filename+"', '"+fileId+"', '"+filepath+"', '"+uploadDate+"', '"+Billid+"', '"+meta_data+"')", function(error, results){
+                                                db.query("INSERT INTO File (file_name, id, url, upload_date, billid, metadata) values ('"+req.file.originalname+"', '"+fileId+"', '"+req.file.location+"', '"+uploadDate+"', '"+Billid+"', '"+fileloc+"')", function(error, results){
 
                                                     if(error){
                                                         throw error;
@@ -689,11 +751,7 @@ var uploadDate = timestamp;
                                         })
                                    
                                 
-
-                                
-
-                                
-                          
+                                    });
                           
                             }
                             else{
@@ -860,15 +918,25 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
                                 console.log("password matched");
                                 if( results2[0].id==ownerID){
                                   if(fileresult[0].billid == results[0].id){
+
+                                    const s3 = new aws.S3();
+                                    var params = { Bucket: ImageS3Bucket, Key: Billid }
+                                    s3.deleteObject(params, function (err, data) {
+                                        if (err) {
+                                            return res.send({ "error": err });
+                                        }
+                                      //  res.send({ data });
+                                    });
+                                
                                     db.query(`DELETE FROM File where id = "${Fileid}"`, (error, results2) => {
                                         if(error){
                                             throw error;
                                         }
                                         else{
                                             
-                                            var filePath = fileresult[0].url;
+                                         //   var filePath = fileresult[0].url;
                                             //if(filePath.length>0){fs.unlinkSync(filePath);} 
-                                            console.log(filePath);
+                                           // console.log(filePath);
                                          
                                                 // fs.unlink(filePath, function(err,result4){
                                                 //     if(err){
@@ -878,19 +946,19 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
                                                     
                                                 // });
 
-                                                if (fs.existsSync(filePath)) {
-                                                    fs.unlinkSync(filePath);
-                                                }
-                                                else{
-                                                    console.log("file already deleted from folder");
+                                                // if (fs.existsSync(filePath)) {
+                                                //     fs.unlinkSync(filePath);
+                                                // }
+                                                // else{
+                                                //     console.log("file already deleted from folder");
                                                     
-                                                }
-                                            
+                                                // }
+                                                console.log("file matched with bill id");
+                                                res.status(200).json({ messege:"File DELETED SUCCESSFULLY"})
                                            
                                         }
                                             
-                                        console.log("file matched with bill id");
-                                        res.status(200).json({ messege:"File DELETED SUCCESSFULLY"})
+                                      
                                         
     
                                     });
