@@ -17,8 +17,8 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 const db = mysql.createConnection({
     host : host,
-    user : "dbuser",
-    password : "Csye6225password",
+    user : user,
+    password : password,
     database: 'csye6225'
 });
 

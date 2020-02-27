@@ -12,8 +12,8 @@ const password = process.env.password;
 
 const db = mysql.createConnection({
     host : host,
-    user : "dbuser",
-    password : "Csye6225password",
+    user : user,
+    password : password,
     database: 'csye6225'
 });
 
@@ -70,7 +70,7 @@ db.query("CREATE TABLE IF NOT EXISTS user_details (id varchar(100), first_name v
     //pool.end();
     });
 
-db.query("CREATE TABLE IF NOT EXISTS Bill (id varchar(50), created_ts varchar(50), updated_ts varchar(50), owner_id varchar(50),vendor varchar(50), bill_date date, due_date date, amount_due double, categories varchar(50), paymentStatus enum('paid', 'due', 'past_due', 'no_payment_required'))", (err, res) => {
+db.query("CREATE TABLE IF NOT EXISTS Bill (id varchar(50), created_ts varchar(50), updated_ts varchar(50), owner_id varchar(50),vendor varchar(50), bill_date date, due_date date, amount_due double, categories varchar(50), paymentStatus enum('paid', 'due', 'past_due', 'no_payment_required'), attachment varchar(200))", (err, res) => {
     console.log(err, res);
     //console.log(res.rows);
     console.log("Bill Table Created");
