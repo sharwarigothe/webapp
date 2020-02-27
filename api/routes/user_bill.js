@@ -25,8 +25,8 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 const db = mysql.createConnection({
     host : host,
-    user : "dbuser",
-    password : "Csye6225password",
+    user : user,
+    password : password,
     database: 'csye6225'
 });
 
@@ -737,6 +737,12 @@ const singleupload = upload.single('BillFile');
                                                         throw error;
                                                     }
                                                     else{
+
+                                                        db.query("UPDATE Bill SET attachment= '"+fileloc+"' where id = '"+Billid+"'", function(error, results){
+                                                            if(error){
+                                                                throw error;
+                                                            }
+                                                       
                 
                                                         res.status(200).json({message :"File attached successfully",
                                                         file_name: req.file.originalname,
@@ -744,6 +750,7 @@ const singleupload = upload.single('BillFile');
                                                         url: req.file.path,
                                                         upload_date: uploadDate
                                             });
+                                        });
                                 
                                                     }
                                                 });
@@ -953,14 +960,19 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
                                                 //     console.log("file already deleted from folder");
                                                     
                                                 // }
-                                                console.log("file matched with bill id");
-                                                res.status(200).json({ messege:"File DELETED SUCCESSFULLY"})
-                                           
+                                                var mes = "NULL";
+                                                db.query("UPDATE Bill SET  attachment= '"+mes+"' where id = '"+Billid+"'",function (error,resulte){
+                                                    if(error){
+                                                        throw error;
+                                                    }
+                                                    else{
+                                                        console.log("file matched with bill id");
+                                                        res.status(200).json({ messege:"File DELETED SUCCESSFULLY"})
+                                                    }
+                                                })
+                                               
                                         }
-                                            
-                                      
-                                        
-    
+
                                     });
                                     
                                    
