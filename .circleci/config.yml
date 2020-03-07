@@ -45,7 +45,7 @@ jobs:
             pwd
             ls -al
             mkdir -p codedeploy_artifact
-            cp /home/sharwari/webapp/codedeploy/*.sh .
+            cp webapp/codedeploy/*.sh .
             zip -r csye6225-web-app-${CIRCLE_BUILD_NUM}.zip * *.sh *.yml *.json
             ls -al
             mv csye6225-web-app-${CIRCLE_BUILD_NUM}.zip codedeploy_artifact/
