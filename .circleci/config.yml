@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: circleci/node:8.10.0
       - image: circleci/mysql:8.0.4
-      - image: circleci/python:3.6-jessie
+      - image: circleci/python:3.7.4
         environment:
    
     steps:
@@ -36,6 +36,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y python-pip python-dev
             sudo easy_install pip
+            pip --version
             sudo pip install awscli
             aws --version
 
