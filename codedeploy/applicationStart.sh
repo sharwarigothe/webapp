@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd home/ubuntu
+cd home/ubuntu/codedeploy
 pwd
 ls --all
 ls --all
