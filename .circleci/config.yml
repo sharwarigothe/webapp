@@ -34,8 +34,7 @@ jobs:
           name: install awscli
           command: |
             sudo apt-get update
-            sudo apt-get install -y python-pip python-dev
-            sudo easy_install pip
+            sudo apt install python3-pip
             pip --version
             sudo pip install awscli
             aws --version
