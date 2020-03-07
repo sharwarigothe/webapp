@@ -10,12 +10,14 @@
   "author": "Sharwari Gothe",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.635.0",
     "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
     "enum": "^2.5.0",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
     "mysql": "^2.17.1",
     "uuid": "^3.4.0"
   },
