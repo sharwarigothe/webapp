@@ -1,37 +1,17 @@
-version: 2
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
 jobs:
-  pr_check:
-    working_directory: ~/webapp
-    docker:
-      - image: circleci/node:8.10.0
-      - image: circleci/mysql:8.0.4
-        environment:
-   
+  build-and-test:
+    executor:
+      name: node/default
     steps:
       - checkout
-      - run: npm install
-      - run: npm test
-  build:
-    working_directory: ~/webapp
-    docker:
-      - image: circleci/node:8.10.0
-      - image: circleci/mysql:8.0.4
-        environment:
-      
-    steps:
-      - checkout
-      - run: npm install
-      - run: npm test
-
+      - node/with-cache:
+          steps:
+            - run: npm install
+            - run: npm test
 workflows:
-  version: 2
-  pr-check-workflow:
-    jobs:
-    - pr_check
-  build-deploy-workflow:
-    jobs:
-    - build:
-        filters:
-            branches:
-              only:
-                - master
+    build-and-test:
+      jobs:
+        - build-and-test
