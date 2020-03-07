@@ -1,5 +1,5 @@
    
 #!/bin/bash
-cd /opt/codedeploy-agent/
+cd home/ubuntu/
 ls --all
 forever start server.js
