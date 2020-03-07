@@ -32,8 +32,11 @@ jobs:
 
       - run:
           name: install awscli
-          command: sudo pip install awscli
-          
+          command: |
+            sudo apt-get update
+            sudo easy_install pip
+            sudo pip install awscli
+
       - run:
           name: Zip Artifact
           command: |
