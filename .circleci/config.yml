@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: circleci/node:8.10.0
       - image: circleci/mysql:8.0.4
+      - image: circleci/python:3.6-jessie
         environment:
    
     steps:
@@ -16,6 +17,7 @@ jobs:
     docker:
       - image: circleci/node:8.10.0
       - image: circleci/mysql:8.0.4
+      - image: circleci/python:3.6-jessie
         environment:
       
     steps:
@@ -26,6 +28,8 @@ jobs:
           name: install dependencies
           command: |
             sudo apt-get update && sudo apt-get install wget zip unzip
+            python3 -m venv venv
+            . venv/bin/activate
 
       - run:
           name: install awscli
