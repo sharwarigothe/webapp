@@ -1,3 +1,5 @@
 #!/bin/bash
 cd home/ubuntu
-pm2 stop all
+pwd
+#pm2 stop all
+forever stopall
