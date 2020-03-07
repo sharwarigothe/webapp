@@ -8,13 +8,13 @@ permissions:
   - object: /home/ubuntu
     owner: ubuntu
     group: ubuntu
-    mode: 700
+    mode: 755
     type:
       - file
   - object: /home/ubuntu
     owner: ubuntu
     group: ubuntu
-    mode: 700
+    mode: 755
     type:
       - directory
 
@@ -30,6 +30,6 @@ hooks:
       runas : ubuntu
 
   ApplicationStart:
-    - location: applicationStart.sh
+    - location: ./applicationStart.sh
       timeout: 300
       runas: ubuntu
