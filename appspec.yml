@@ -19,7 +19,7 @@ permissions:
       - directory
 
 hooks:
-  ApplcationStop:
+  ApplicationStop:
    - location: ./applicationStop.sh
      timeout: 300
      runas : ubuntu
@@ -28,3 +28,8 @@ hooks:
     - location: ./afterInstall.sh
       timeout: 300
       runas : ubuntu
+
+  ApplicationStart:
+    - location: ./applicationStart.sh
+      timeout: 300
+      runas: ubuntu
