@@ -1,6 +1,15 @@
 version: 2
 jobs:
+  pr_check:
+    working_directory: ~/webapp
+    docker:
+      - image: circleci/python:3.6-jessie
+   
+    steps:
+      - checkout
+
   build:
+    working_directory: ~/webapp
     docker:
       - image: circleci/python:3.6-jessie
     steps:
