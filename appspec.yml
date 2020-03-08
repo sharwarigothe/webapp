@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: ./
-    destination: /opt/codedeploy-agent/deployment-root/c6babf6d-e5e2-422b-bead-3f0c550944d7/d-V74XFPA03/deployment-archive
+    destination: /opt/codedeploy-agent
 
 hooks:
   ApplcationStop:
