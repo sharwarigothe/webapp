@@ -31,5 +31,5 @@ hooks:
 
   ApplicationStart:
     - location: opt/codedeploy-agent/applicationStart.sh
-      timeout: 300
+      timeout: 1200
       runas: ubuntu
