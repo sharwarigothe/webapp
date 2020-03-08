@@ -3,20 +3,35 @@ os: linux
 
 files:
   - source: ./
-    destination: /home/ubuntu
+    destination: /home/ubuntu/webapp
+permissions:
+  - object: /home/ubuntu/webapp
+    owner: ubuntu
+    group: ubuntu
+    mode: 700
+    type:
+      - file
+  - object: /home/ubuntu/webapp
+    owner: ubuntu
+    group: ubuntu
+    mode: 700
+    type:
+      - directory
+
 hooks:
   ApplcationStop:
    - location: ./applicationStop.sh
      timeout: 300
-     runas : root
+     runas : ubuntu
 
   AfterInstall:
     - location: ./afterInstall.sh
       timeout: 300
-      runas : root
+      runas : ubuntu
 
   ApplicationStart:
     - location: ./applicationStart.sh
       timeout: 300
-      runas: root
+      runas: ubuntu
 
+      
