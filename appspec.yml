@@ -3,7 +3,20 @@ os: linux
 
 files:
   - source: ./
-    destination: /opt/codedeploy-agent
+    destination: /home/ubuntu
+permissions:
+  - object: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    mode: 700
+    type:
+      - file
+  - object: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    mode: 700
+    type:
+      - directory
 
 hooks:
   ApplcationStop:
