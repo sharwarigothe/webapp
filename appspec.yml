@@ -19,7 +19,7 @@ permissions:
       - directory
 
 hooks:
-  ApplicationStop:
+  ApplcationStop:
    - location: ./applicationStop.sh
      timeout: 300
      runas : ubuntu
