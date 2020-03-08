@@ -19,7 +19,7 @@ permissions:
       - directory
 
 hooks:
-  ApplcationStop:
+  ApplicationStop:
    - location: codedeploy/applicationStop.sh
      timeout: 300
      runas : ubuntu
