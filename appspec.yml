@@ -30,6 +30,6 @@ hooks:
       runas : ubuntu
 
   ApplicationStart:
-    - location: applicationStart.sh
-      timeout: 1200
+    - location: ./applicationStart.sh
+      timeout: 300
       runas: ubuntu
