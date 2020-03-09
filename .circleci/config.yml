@@ -24,7 +24,7 @@ jobs:
       - run: npm test
 
   codedeploybuild:
-    working_directory: ~/.
+    working_directory: ~/webapp
     docker:
       - image: circleci/python:3.6-jessie
     steps:
