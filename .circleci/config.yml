@@ -22,6 +22,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm test
+      
   codedeploybuild:
     working_directory: ~/webapp
     docker:
