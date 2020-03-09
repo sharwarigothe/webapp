@@ -1,3 +1,3 @@
 #!/bin/bash
-cd home/centos/webapp
+cd home/ubuntu/webapp
 pm2 stop all
