@@ -1,3 +1,3 @@
 #!/bin/bash
-cd home/ubuntu/webapp
+cd home/ubuntu
 pm2 stop all

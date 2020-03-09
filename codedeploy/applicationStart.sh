@@ -1,4 +1,4 @@
 #!/bin/bash
-cd home/ubuntu/webapp
+cd home/ubuntu
 pwd
 pm2 start server.js -f
