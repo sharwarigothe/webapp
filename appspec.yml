@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source: ./
+  - source: /
     destination: /home/ubuntu
 permissions:
   - object: /home/ubuntu
@@ -20,15 +20,15 @@ permissions:
 
 hooks:
   ApplicationStop:
-    - location: ./applicationStop.sh
+    - location: applicationStop.sh
       timeout: 300
 
   AfterInstall:
-    - location: ./afterInstall.sh
+    - location: afterInstall.sh
       timeout: 300
 
   ApplicationStart:
-    - location: ./applicationStart.sh
+    - location: applicationStart.sh
       timeout: 300
 
       
