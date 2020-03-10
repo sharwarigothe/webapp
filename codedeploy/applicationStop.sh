@@ -1,4 +1,3 @@
 #!/bin/bash
-cd home/ubuntu
-pwd
+cd /home/ubuntu
 pm2 stop all
