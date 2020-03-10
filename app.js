@@ -63,7 +63,6 @@ app.use((error, req, res, next) =>{
 
 });
 
-
 db.query("CREATE TABLE IF NOT EXISTS user_details (id varchar(100), first_name varchar(30), last_name varchar(30), password varchar(100), email_address varchar(50), account_created datetime, account_updated datetime)", (err, res) => {
     console.log(err, res);
     //console.log(res.rows);
