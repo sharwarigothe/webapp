@@ -15,8 +15,6 @@ jobs:
   build:
     working_directory: ~/webapp
     docker:
-      - image: circleci/node:8.10.0
-      - image: circleci/mysql:8.0.4
       - image: circleci/python:3.6-jessie 
     steps:
       - checkout
