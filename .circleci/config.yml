@@ -5,22 +5,24 @@ jobs:
     docker:
       - image: circleci/node:8.10.0
       - image: circleci/mysql:8.0.4
+      - image: circleci/python:3.6-jessie 
         environment:
    
     steps:
       - checkout
       - run: npm install
       - run: npm test
-
   build:
     working_directory: ~/webapp
     docker:
       - image: circleci/node:8.10.0
       - image: circleci/mysql:8.0.4
       - image: circleci/python:3.6-jessie 
+        environment:
+      
     steps:
       - checkout
-      
+
       - run:
           name: install dependencies
           command: |
@@ -49,8 +51,8 @@ jobs:
             pwd
             cd ..
             pwd
-            ls -al
-
+            ls -al    
+      
       - run:
           name: Upload Artifact to S3
           command: |
@@ -64,8 +66,6 @@ jobs:
 
             aws deploy register-application-revision --application-name csye6225-webapp --s3-location bucket=${S3_CODEDEPLOY_BUCKET},bundleType=zip,key=deployments/csye6225-web-app-${CIRCLE_BUILD_NUM}.zip
             aws deploy create-deployment --application-name csye6225-webapp --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name csye6225-webapp-deployment --s3-location bucket=${S3_CODEDEPLOY_BUCKET},bundleType=zip,key=deployments/csye6225-web-app-${CIRCLE_BUILD_NUM}.zip
-
-
 
 workflows:
   version: 2
