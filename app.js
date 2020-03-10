@@ -43,8 +43,8 @@ app.use(bodyParser.json());
 
 
 //Routes which should handle requests
-app.use('/v2/user', userRoutes);
-app.use('/v2/bill', billRoutes);
+app.use('/v1/user', userRoutes);
+app.use('/v1/bill', billRoutes);
 
 app.use((req, res, next) =>{
     const error = new Error('Not Found');
