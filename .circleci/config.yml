@@ -12,6 +12,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm test
+      
   build:
     working_directory: ~/webapp
     docker:
