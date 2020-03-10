@@ -12,6 +12,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm test
+
   build:
     working_directory: ~/webapp
     docker:
@@ -71,7 +72,11 @@ workflows:
   version: 2
   pr-check-workflow:
     jobs:
-    - pr_check
+    - pr_check:
+        filters:
+            branches:
+              only:
+                - master
   build-deploy-workflow:
     jobs:
     - build:
