@@ -77,3 +77,6 @@ workflows:
             branches:
               only:
                 - master
+                - codedeploy
+                
+                
