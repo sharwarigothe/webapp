@@ -2,21 +2,8 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
+  - source: ./
     destination: /home/ubuntu
-permissions:
-  - object: /home/ubuntu
-    owner: ubuntu
-    group: ubuntu
-    mode: 700
-    type:
-      - file
-  - object: /home/ubuntu
-    owner: ubuntu
-    group: ubuntu
-    mode: 700
-    type:
-      - directory
 
 hooks:
   ApplicationStop:

@@ -1,4 +1,4 @@
 #!/bin/bash
-echo "dsadas"
-
-
+cd home/ubuntu
+pwd
+pm2 stop all
