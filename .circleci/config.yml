@@ -5,14 +5,12 @@ jobs:
     docker:
       - image: circleci/node:8.10.0
       - image: circleci/mysql:8.0.4
-      - image: circleci/python:3.6-jessie 
         environment:
    
     steps:
       - checkout
       - run: npm install
       - run: npm test
-
   build:
     working_directory: ~/webapp
     docker:
@@ -23,16 +21,13 @@ jobs:
       
     steps:
       - checkout
-
       - run:
           name: install dependencies
           command: |
             sudo apt-get update && sudo apt-get install wget zip unzip
-
       - run:
           name: install awscli
           command: sudo pip install awscli
-
       - run:
           name: Zip Artifact
           command: |
@@ -53,14 +48,10 @@ jobs:
             cd ..
             pwd
             ls -al    
-      
       - run:
           name: Upload Artifact to S3
           command: |
-
             aws s3 cp codedeploy_artifact/csye6225-web-app-${CIRCLE_BUILD_NUM}.zip s3://${S3_CODEDEPLOY_BUCKET}/deployments/csye6225-web-app-${CIRCLE_BUILD_NUM}.zip
-
-
       - run:
           name: Make CodeDeploy API call
           command: |
@@ -72,11 +63,7 @@ workflows:
   version: 2
   pr-check-workflow:
     jobs:
-    - pr_check:
-        filters:
-            branches:
-              only:
-                - master
+    - pr_check
   build-deploy-workflow:
     jobs:
     - build:
