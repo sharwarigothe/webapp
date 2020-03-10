@@ -2,4 +2,5 @@
 cd /home/ubuntu
 sudo npm install -y
 sudo npm install -y pm2@2.4 -g
-echo "installed pm2"
+sudo npm install -y aws-sdk --save
+sudo npm install -y multer-s3 --save

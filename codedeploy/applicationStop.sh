@@ -1,3 +1,3 @@
 #!/bin/bash
 cd /home/ubuntu
-echo "abcd"
+pm2 stop all
