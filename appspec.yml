@@ -4,18 +4,31 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu
+permissions:
+  - object: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    mode: 700
+    type:
+      - file
+  - object: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    mode: 700
+    type:
+      - directory
 
 hooks:
   ApplicationStop:
-    - location: applicationStop.sh
+    - location: ./applicationStop.sh
       timeout: 300
 
   AfterInstall:
-    - location: afterInstall.sh
+    - location: ./afterInstall.sh
       timeout: 300
 
   ApplicationStart:
-    - location: applicationStart.sh
+    - location: ./applicationStart.sh
       timeout: 300
 
       
