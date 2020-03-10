@@ -1,25 +1,9 @@
 version: 2
 jobs:
-  pr_check:
-    working_directory: ~/webapp
-    docker:
-      - image: circleci/node:8.10.0
-      - image: circleci/mysql:8.0.4
-      - image: circleci/python:3.6-jessie
-        environment:
-   
-    steps:
-      - checkout
-      - run: npm install
-      - run: npm test
   build:
     working_directory: ~/webapp
     docker:
-      - image: circleci/node:8.10.0
-      - image: circleci/mysql:8.0.4
-      - image: circleci/python:3.6-jessie
-        environment:
-      
+      - image: circleci/python:3.6-jessie 
     steps:
       - checkout
       - run: npm install
@@ -72,9 +56,6 @@ jobs:
 
 workflows:
   version: 2
-  pr-check-workflow:
-    jobs:
-    - pr_check
   build-deploy-workflow:
     jobs:
     - build:
