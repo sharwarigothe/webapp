@@ -27,5 +27,3 @@ This application is build using nodejs and mysql server. To run this application
         - sudo apt-get install -y nodejs
 
 
-
-
