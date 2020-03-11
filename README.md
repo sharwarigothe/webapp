@@ -14,6 +14,7 @@ This application is build using nodejs and mysql server. To run this application
     - git commit -m "YOUR COMMIT MESSAGE"
     - git push sharwari <BRANCH_NAME>
 
+
 - After sshing into the new instance
     -  ssh -i ~/.ssh/keypairprodus2 ubuntu@13.59.147.163
 
@@ -25,7 +26,5 @@ This application is build using nodejs and mysql server. To run this application
         - sudo apt-get install curl
         - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
         - sudo apt-get install -y nodejs
-
-
 
 
