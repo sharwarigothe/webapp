@@ -27,4 +27,11 @@ This application is build using nodejs and mysql server. To run this application
         - curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
         - sudo apt-get install -y nodejs
 
+- CICD
+    - The appspec.yml file is created in the root repository
+    - The codedeploy folder contains the applicationStop.sh, afterInstall.sh and applicationStart.sh file
+    - The application will be pushed into git branch. 
+    - The web application is zipped and sent to S3 bucket.
+    - The complete CICD process is executed and the appplication runs on the EC2 instance without manually sshing into the EC2 instance 
+
 
