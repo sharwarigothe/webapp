@@ -33,6 +33,5 @@ This application is build using nodejs and mysql server. To run this application
     - The application will be pushed into git branch. 
     - The web application is zipped and sent to S3 bucket.
     - The complete CICD process is executed and the appplication runs on the EC2 instance without manually sshing into the EC2 instance 
-    - trying prod
 
 
