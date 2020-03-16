@@ -10,6 +10,9 @@ const saltRounds = 10;
 const host=process.env.host;
 const user = process.env.user;
 const password = process.env.password;
+const logger = require('../../config/winston');
+const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
+
 
 
 router.use(bodyParser.json());
@@ -35,9 +38,6 @@ db.connect((error) =>{
 
 //CloudWatch
 
-const logger = require('../../config/winston');
-
-const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
 
 
 
@@ -57,12 +57,13 @@ router.post('/', function(req, res, next) {
     var d = new Date();
     var n = d.getMilliseconds();
 
-    console.log("getting user_post");
-    logger.info("USER_POST LOG");
-    console.log("getting user_post counter");
-    sdc.increment('USER_POST_counter');
-    console.log("getting user_post timer");
-    sdc.timing('some.timer');
+
+    // logger.info("USER_POST LOG");
+    // sdc.increment('USER_POST_counter');
+    // sdc.timing('some.timer');
+
+    logger.info("User Register Call");
+    sdc.increment('POST user');
 
     var date_ob = new Date();
    
@@ -127,10 +128,12 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
                 console.log("jffu"+abhash);
             db.query(`INSERT INTO user_details (id, first_name, last_name, password, email_address, account_created, account_updated) values ("${uuid}","${first_name}", "${last_name}", "${abhash}","${email_address}", "${account_created}","${account_updated}")`,function(error, results, row){
             if(error){
+                logger.error(err);
                 res.status(400).send({error: 'Something went wrong in POST'});
             }
             else if(email_address == results.email_address){
                 res.status(400).send({error: 'exist'});
+                logger.error(err);
                 throw error;
             }
             else{
@@ -141,11 +144,8 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
     });
     }
 });
-console.log("getting milliseconds");
 var n1 = d.getMilliseconds();
-console.log("getting duration");
 var duration = (n1-n);
-console.log("final post print");
 sdc.timing("Post User Time Duration",duration);
 
 });
