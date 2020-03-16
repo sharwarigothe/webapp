@@ -57,8 +57,11 @@ router.post('/', function(req, res, next) {
     var d = new Date();
     var n = d.getMilliseconds();
 
+    console.log("getting user_post");
     logger.info("USER_POST LOG");
+    console.log("getting user_post counter");
     sdc.increment('USER_POST_counter');
+    console.log("getting user_post timer");
     sdc.timing('some.timer');
 
     var date_ob = new Date();
@@ -116,6 +119,7 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
         
        
         else{
+            console.log("getting res time");
             sdc.timing('USER_response_time');
             bcrypt.hash(password, saltRounds, function(err,hash) {
                // db.query(`INSERT INTO user_details (id, first_name, last_name, password, email_address, account_created, account_updated) values (?,?,?,?,?,?,?)`,[uuid, first_name, last_name, hash, email_address, account_created, account_updated],function(error, results, row){
@@ -137,8 +141,11 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
     });
     }
 });
+console.log("getting milliseconds");
 var n1 = d.getMilliseconds();
+console.log("getting duration");
 var duration = (n1-n);
+console.log("final post print");
 sdc.timing("Post User Time Duration",duration);
 
 });
