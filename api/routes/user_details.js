@@ -33,6 +33,11 @@ db.connect((error) =>{
     }
 });
 
+//CloudWatch
+
+const logger = require('../../config/winston');
+
+const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
 
 
 
@@ -47,15 +52,16 @@ router.post('/', function(req, res, next) {
     const last_name = req.body.last_name;
     const password = req.body.password;
     const email_address = req.body.email_address;
-    
-//console.log(JSON.stringify(db));
+
 
     var d = new Date();
     var n = d.getMilliseconds();
 
-    var date_ob = new Date();
+    logger.info("USER_POST LOG");
+    sdc.increment('USER_POST_counter');
+    sdc.timing('some.timer');
 
-    //
+    var date_ob = new Date();
    
 let date = ("0" + date_ob.getDate()).slice(-2);
 
@@ -110,6 +116,7 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
         
        
         else{
+            sdc.timing('USER_response_time');
             bcrypt.hash(password, saltRounds, function(err,hash) {
                // db.query(`INSERT INTO user_details (id, first_name, last_name, password, email_address, account_created, account_updated) values (?,?,?,?,?,?,?)`,[uuid, first_name, last_name, hash, email_address, account_created, account_updated],function(error, results, row){
                 let abhash = hash;
@@ -130,7 +137,9 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
     });
     }
 });
-
+var n1 = d.getMilliseconds();
+var duration = (n1-n);
+sdc.timing("Post User Time Duration",duration);
 
 });
 
