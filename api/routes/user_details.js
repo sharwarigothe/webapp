@@ -62,8 +62,11 @@ router.post('/', function(req, res, next) {
     // sdc.increment('USER_POST_counter');
     // sdc.timing('some.timer');
 
-    logger.info("User Register Call");
-    sdc.increment('POST user');
+    logger.info("USER_POST LOG");
+    sdc.increment('USER_POST_counter');
+    sdc.timing('some.timer');
+    
+
 
     var date_ob = new Date();
    
@@ -160,6 +163,12 @@ router.get('/self', function(req, res, next) {
     const first_name = req.body.first_name;
     const last_name = req.body.last_name;
     const email_address = req.body.email_address;
+
+    var d = new Date();
+    var n = d.getMilliseconds();
+    logger.info("USER_GET LOG");
+    sdc.increment('USER_GET counter');
+    
     
    
        // res.render('index', {title: 'Hello fine users'});
@@ -188,6 +197,7 @@ router.get('/self', function(req, res, next) {
     
                             // res.status(200).json({results})
     
+                            logger.info("the User with username '"+username1+"' retrieved");
                                  res.status(200).json({
                                      EMAIL: results[0].email_address,
                                      FIRST_NAME: results[0].first_name,
@@ -202,7 +212,7 @@ router.get('/self', function(req, res, next) {
                              
                              else{
                                  console.log("checksfe"+results);
-                                
+                                 logger.error("Please enter valid username and password");
                                  res.status(401).json({
                                     message:"invalid username or password"
                                  })
@@ -229,7 +239,10 @@ router.get('/self', function(req, res, next) {
     //     }
     //     res.status(200).json({results})
     // })
-    })
+    var n1 = d.getMilliseconds();
+var duration = (n1-n);
+sdc.timing("Get User Time Duration",duration);
+    });
 
 
 //PUT Request
