@@ -35,6 +35,8 @@ This application is build using nodejs and mysql server. To run this application
     - The complete CICD process is executed and the appplication runs on the EC2 instance without manually sshing into the EC2 instance 
 
 - CloudWatch
-
+    - To calculate the number of times an api is called by the user and the time duration to get results
+    - Installed cloudwatch-agent in AMI and linked the policies to it in cloudformation 
+    - Used winston to send logs to aws
 
 
