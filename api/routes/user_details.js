@@ -12,9 +12,6 @@ const user = process.env.user;
 const password = process.env.password;
 const logger = require('../../config/winston');
 const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
-
-
-
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
 
@@ -36,9 +33,6 @@ db.connect((error) =>{
     }
 });
 
-//CloudWatch
-
-
 //POST Request
 
 router.post('/', function(req, res, next) {
@@ -54,12 +48,6 @@ router.post('/', function(req, res, next) {
 
     var d = new Date();
     var n = d.getMilliseconds();
-
-
-    // logger.info("USER_POST LOG");
-    // sdc.increment('USER_POST_counter');
-    // sdc.timing('some.timer');
-
     logger.info("USER_POST LOG");
     sdc.increment('USER_POST_counter');
     sdc.timing('some.timer');
@@ -139,6 +127,7 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
                 throw error;
             }
             else{
+                logger.info("USER_POST LOG with emailid"+email_address);
                 var n4 = d.getMilliseconds();
                 var duration1 = (n4-n3);
                 sdc.timing("Post User DB Duration",duration1);
@@ -202,6 +191,10 @@ router.get('/self', function(req, res, next) {
                             // res.status(200).json({results})
     
                             logger.info("the User with username '"+username1+"' retrieved");
+                            var n4 = d.getMilliseconds();
+                            var duration1 = (n4-n3);
+                            sdc.timing("GET User DB Duration",duration1);
+                            logger.info("GET User DB duration "+duration1);
                                  res.status(200).json({
                                      EMAIL: results[0].email_address,
                                      FIRST_NAME: results[0].first_name,
@@ -246,6 +239,7 @@ router.get('/self', function(req, res, next) {
     var n1 = d.getMilliseconds();
     var duration = (n1-n);
     sdc.timing("Get User Time Duration",duration);
+    logger.info("GET USER duration "+duration);
     });
 
 
@@ -338,7 +332,12 @@ router.get('/self', function(req, res, next) {
                                            
                                                 if(error){
                                                     throw error
-                                                }                                                    
+                                                }                     
+                                                     logger.info("PUT USER SUCCESSFULLY"); 
+                                                     var n4 = d.getMilliseconds();
+                                                     var duration1 = (n4-n3);
+                                                     sdc.timing("PUT User DB Duration",duration1);
+                                                     logger.info("PUT User DB duration "+duration1);                              
                                                      res.status(200).json({
                                                              message:"User Updated successfully",
                                                                 first_name: first_name,
@@ -355,6 +354,7 @@ router.get('/self', function(req, res, next) {
         
                                         }
                                         else{
+                                            logger.error("Email address did not match");
                                             res.status(400).json({error: "Email addresses should match"});
                                         }
                              }
@@ -376,6 +376,7 @@ router.get('/self', function(req, res, next) {
         var n1 = d.getMilliseconds();
         var duration = (n1-n);
         sdc.timing("Put User time duration",duration);
+        logger.info("PUT USER duration "+duration);
 });
 
 module.exports = router;
