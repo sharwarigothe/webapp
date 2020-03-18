@@ -347,7 +347,7 @@ router.get("/",function(req,res){
                             }
                            
                             else{
-                               
+                                logger.info("BILL_ALL_GET LOG");
                                 logger.info("GET API SUCCESS");
                                 var n4 = d.getMilliseconds();
                                 var duration1 = (n4-n3);
