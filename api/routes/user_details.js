@@ -128,7 +128,8 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
                 let abhash = hash;
                 console.log("jffu"+abhash);
             db.query(`INSERT INTO user_details (id, first_name, last_name, password, email_address, account_created, account_updated) values ("${uuid}","${first_name}", "${last_name}", "${abhash}","${email_address}", "${account_created}","${account_updated}")`,function(error, results, row){
-            if(error){
+                var n3 = d.getMilliseconds();
+                if(error){
                 logger.error(err);
                 res.status(400).send({error: 'Something went wrong in POST'});
             }
@@ -138,6 +139,10 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
                 throw error;
             }
             else{
+                var n4 = d.getMilliseconds();
+                var duration1 = (n4-n3);
+                sdc.timing("Post User DB Duration",duration1);
+                logger.info("Post User DB duration "+duration1);
                 res.status(201).json({id, first_name, last_name, email_address, account_created, account_updated});
             }
         });
@@ -148,6 +153,7 @@ db.query(`select * from user_details where email_address = "${email_address}"`,f
 var n1 = d.getMilliseconds();
 var duration = (n1-n);
 sdc.timing("Post User Time Duration",duration);
+logger.info("Post duration "+duration);
 
 });
 
