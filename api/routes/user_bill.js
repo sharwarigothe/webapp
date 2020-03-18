@@ -311,8 +311,8 @@ router.get("/",function(req,res){
 
     var d = new Date();
     var n = d.getMilliseconds();
-    logger.info("BILL_GET LOG");
-    sdc.increment('BILL_GET counter');
+    logger.info("BILL_ALL_GET LOG");
+    sdc.increment('BILL_ALL_GET counter');
 
    //const urlid = req.params.id;
     //console.log(id);
@@ -348,7 +348,7 @@ router.get("/",function(req,res){
                            
                             else{
                                 logger.info("BILL_ALL_GET LOG");
-                                logger.info("GET API SUCCESS");
+                                
                                 var n4 = d.getMilliseconds();
                                 var duration1 = (n4-n3);
                                 sdc.timing("GET ALL-BILL DB Duration",duration1);
