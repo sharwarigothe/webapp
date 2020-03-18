@@ -249,7 +249,11 @@ sdc.timing("Get User Time Duration",duration);
 
     router.put('/self', function(req, res, next) {
 
-       
+        var d = new Date();
+        var n = d.getMilliseconds();
+        logger.info("USER_PUT LOG");
+        sdc.increment('USER_PUT counter');
+
         if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0) {
             // Get the username and password
             var header = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString();
@@ -376,10 +380,12 @@ sdc.timing("Get User Time Duration",duration);
             });
         }
         
-
+        var n1 = d.getMilliseconds();
+        var duration = (n1-n);
+        sdc.timing("Put User time duration",duration);
 
         
-        })
+        });
 
 
 
