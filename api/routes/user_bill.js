@@ -69,7 +69,8 @@ router.post("/",(req,res,next)=>{
 
     var d = new Date();
     var n = d.getMilliseconds();
-  
+    logger.info("BILL_POST LOG");
+    sdc.increment('BILL_POST counter');
 
 
     var date_ob=new Date();
@@ -178,6 +179,10 @@ const bill={
 
                         else{
                         logger.info("Bill with id '"+u1+"' inserted successfully");
+                        var n4 = d.getMilliseconds();
+                        var duration1 = (n4-n3);
+                        sdc.timing("Post Bill DB Duration",duration1);
+                        logger.info("Post Bill DB duration "+duration1);
                         res.status(200).json({message: "Bill inserted",
                         id: u1,
                         created_ts : timestamp,
@@ -211,12 +216,18 @@ const bill={
             }
         });
     }
+    var n1 = d.getMilliseconds();
+    var duration = (n1-n);
+    sdc.timing("Post Bill Time",duration);
+    logger.info("Post Bill duration "+duration);
 });
 
 router.get("/:id",function(req,res){
 
     var d = new Date();
     var n = d.getMilliseconds();
+    logger.info("BILL_GET LOG");
+    sdc.increment('BILL_GET counter');
 
     const id = req.params.id;
     console.log(id);
@@ -251,6 +262,11 @@ router.get("/:id",function(req,res){
                                 console.log("Wrong id");
                             }
                             else if(resulte[0].owner_id == results[0].id){  
+                                logger.info("BILL_GET LOG");
+                                var n4 = d.getMilliseconds();
+                                var duration1 = (n4-n3);
+                                sdc.timing("GET BILL DB Duration",duration1);
+                                logger.info("GET BILL DB duration "+duration1);
                                 var cat = JSON.parse(resulte[0].categories);
                                 res.status(200).json({
                                     id: id,
@@ -282,7 +298,8 @@ router.get("/:id",function(req,res){
     }
     var n1 = d.getMilliseconds();
     var duration = (n1-n);
-    sdc.timing("Post Bill Time",duration);
+    sdc.timing("Get Bill Time",duration);
+    logger.info("GET Bill duration "+duration);
 });
 
 
@@ -329,6 +346,10 @@ router.get("/",function(req,res){
                             else{
                                
                                 logger.info("GET API SUCCESS");
+                                var n4 = d.getMilliseconds();
+                                var duration1 = (n4-n3);
+                                sdc.timing("GET ALL-BILL DB Duration",duration1);
+                                logger.info("GET ALL-BILL DB duration "+duration1);
                                 console.log(resulte);
                                 res.status(200).json({message:"all values",
                                 data : resulte
@@ -353,7 +374,8 @@ router.get("/",function(req,res){
     }
     var n1 = d.getMilliseconds();
     var duration = (n1-n);
-    sdc.timing("Get Recipe time",duration);
+    sdc.timing("Get BILLS time",duration);
+    logger.info("GET ALL BILLS duration "+duration);
 });
 
 
@@ -363,8 +385,8 @@ router.delete("/:id",(req,res)=>{
 
     var d = new Date();
     var n = d.getMilliseconds();
-    logger.info("RECIPE_DEL LOG");
-    sdc.increment('RECIPE_DEL counter');
+    logger.info("BILL_DEL LOG");
+    sdc.increment('BILL_DEL counter');
 
     const id=req.params.id;
     console.log("ID:"+id);
@@ -416,6 +438,11 @@ router.delete("/:id",(req,res)=>{
                                                     }
         
                                                   else{
+                                                    logger.info("DELETE API SUCCESS");
+                                                    var n4 = d.getMilliseconds();
+                                                    var duration1 = (n4-n3);
+                                                    sdc.timing("DELETE BILL DB Duration",duration1);
+                                                    logger.info("DELETE BILL DB and from S3 bucket duration "+duration1);
                                                     const s3 = new aws.S3();
                                                     var params = { Bucket: ImageS3Bucket, Key: id }
                                                     s3.deleteObject(params, function (err, data) {
@@ -593,7 +620,11 @@ var updated_ts = timestamp;
                                      
                                 
                                     else{
-                                        logger.info("PUT BILL UPDATED SUCCESSFULLY");
+                                        logger.info("PUT BILL API SUCCESS");
+                                        var n4 = d.getMilliseconds();
+                                        var duration1 = (n4-n3);
+                                        sdc.timing("PUT BILL DB Duration",duration1);
+                                        logger.info("PUT BILL DB duration "+duration1);
                                         res.status(200).json({
                                             Id : ress[0].id,
                                             created_ts : ress[0].created_ts,
@@ -635,13 +666,11 @@ var updated_ts = timestamp;
     var n1 = d.getMilliseconds();
     var duration = (n1-n);
     sdc.timing("Put Bill Time",duration);
+    logger.info("PUT Bill duration "+duration);
 });
 
 
 //POST FILE TO BILL
-
-
-
 
 router.post("/:id/file",function(req, res){
    
@@ -774,7 +803,11 @@ const singleupload = upload.single('BillFile');
                                                                 throw error;
                                                             }
                                                        
-                
+                                                        logger.info("File with id '"+fileId+"'added successfully");
+                                                        var n4 = d.getMilliseconds();
+                                                        var duration1 = (n4-n3);
+                                                        sdc.timing("Post FILE DB Duration",duration1);
+                                                        logger.info("Post FILE DB duration "+duration1);
                                                         res.status(200).json({message :"File attached successfully",
                                                         file_name: req.file.originalname,
                                                         id: fileId,
@@ -809,6 +842,7 @@ const singleupload = upload.single('BillFile');
     var n1 = d.getMilliseconds();
     var duration = (n1-n);
     sdc.timing("Post File to S3",duration);
+    logger.info("POST FILE to S3 duration"+duration);
 });
 //GET FILE
 
@@ -817,8 +851,8 @@ router.get("/:billId/file/:fileId",function(req, res){
 
     var d = new Date();
     var n = d.getMilliseconds();
-    logger.info("RECIPE_IMG_GET LOG");
-    sdc.increment('RECIPE_IMG_GET counter');
+    logger.info("FILE_GET LOG");
+    sdc.increment('FILE_GET counter');
 
     console.log(req.file);
     const Billid = req.params.billId;
@@ -869,7 +903,11 @@ router.get("/:billId/file/:fileId",function(req, res){
                                        }
                                     else if(fileresults[0].billid == resulte[0].id){
                                         console.log("file belongs to the bill");
-                                        logger.info('FILE receive successfully')
+                                        logger.info('FILE receive successfully');
+                                        var n4 = d.getMilliseconds();
+                                        var duration1 = (n4-n3);
+                                        sdc.timing("GET FILE DB Duration",duration1);
+                                        logger.info("GET FILE DB duration "+duration1);
                                         res.status(200).json({
                                         file_name: fileresults[0].file_name,
                                         id: FileId,
@@ -909,6 +947,7 @@ router.get("/:billId/file/:fileId",function(req, res){
     var n1 = d.getMilliseconds();
     var duration = (n1-n);
     sdc.timing("Get File from S3 Time",duration);
+    logger.info("Get FILE from S2 time"+duration);
 })
 
 
@@ -1013,6 +1052,10 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
                                                     }
                                                     else{
                                                         logger.info("File with id '"+Fileid+"' deleted successfully");
+                                                        var n4 = d.getMilliseconds();
+                                                        var duration1 = (n4-n3);
+                                                        sdc.timing("DELETE FILE DB Duration",duration1);
+                                                        logger.info("DELETE FILE DB duration "+duration1);
                                                         console.log("file matched with bill id");
                                                         res.status(200).json({ messege:"File DELETED SUCCESSFULLY"})
                                                     }
@@ -1068,11 +1111,8 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
     var n1 = d.getMilliseconds();
     var duration = (n1-n);
     sdc.timing("Delete File from S3 Time",duration);
-
+    logger.info("Delete File from S3 timer"+duration);
 });
-
-
-
 
 
 module.exports = router;
