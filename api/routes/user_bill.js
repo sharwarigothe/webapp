@@ -143,6 +143,7 @@ const bill={
                 var uuid = results[0].id;
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
+                        var n3 = d.getMilliseconds();
 
                         if(Number(bill.amount_due< 0.01)|| (Number(bill.amount_due > 20000))){
                            res.status(400).json({error: "The amount due is either less than minimum amount or greater than the maximum amount"});
@@ -252,6 +253,7 @@ router.get("/:id",function(req,res){
 
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
+                        var n3 = d.getMilliseconds();
                         db.query(`Select id, created_ts, updated_ts, owner_id, vendor, bill_date, due_date, amount_due, categories, paymentStatus from Bill where id = "${id}"`,function (error,resulte){
                           
                             if(error){
@@ -337,6 +339,7 @@ router.get("/",function(req,res){
 
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
+                        var n3 = d.getMilliseconds();
                         //db.query(`Select id, created_ts, updated_ts, owner_id, vendor, bill_date, due_date, amount_due, categories from Bill where id = "${id}"`,function (error,resulte,rows,fields){
                             db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resulte,rows,fields){  
                             if(error){
@@ -418,6 +421,7 @@ router.delete("/:id",(req,res)=>{
                             throw error;
                         }
                         if(result == true){
+                            var n3 = d.getMilliseconds();
                             if( results2[0].id==ownerID){
                               
 
@@ -584,6 +588,7 @@ var updated_ts = timestamp;
 
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
+                        var n3 = d.getMilliseconds();
                         db.query(`Select * from Bill where id = "${id}"`, function(error, ress){
 
                             if(error){
@@ -755,6 +760,7 @@ const singleupload = upload.single('BillFile');
 
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
+                        var n3 = d.getMilliseconds();
                         db.query(`Select id, created_ts, updated_ts, owner_id, vendor, bill_date, due_date, amount_due, categories, paymentStatus from Bill where id = "${Billid}"`,function (error,resulte){
                           
                             if(error){
@@ -880,6 +886,7 @@ router.get("/:billId/file/:fileId",function(req, res){
 
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
+                        var n3 = d.getMilliseconds();
                         console.log("password matched");
                         db.query(`Select id, created_ts, updated_ts, owner_id, vendor, bill_date, due_date, amount_due, categories, paymentStatus from Bill where id = "${Billid}"`,function (error,resulte){
                           
@@ -1007,6 +1014,7 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
                                 throw error;
                             }
                             if(result == true){
+                                var n3 = d.getMilliseconds();
                                 console.log("password matched");
                                 if( results2[0].id==ownerID){
                                   if(fileresult[0].billid == results[0].id){

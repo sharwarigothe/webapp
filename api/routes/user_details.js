@@ -183,7 +183,7 @@ router.get('/self', function(req, res, next) {
                 var pa = results[0].password;
                 console.log("hgfd"+pa);
                 bcrypt.compare(password1, pa, (error, result) => {
-
+                    var n3 = d.getMilliseconds();
                     // pool.query("SELECT email, firstname, lastname FROM users where email = '"+username1+"' and PASSWORD='"+password1+"'", (error, results) => {
                          if(result == true){
                             // console.log("checksfe"+results.rows[0]);
@@ -276,7 +276,7 @@ router.get('/self', function(req, res, next) {
                         if(result == true){
                                  console.log("VERIFIED");
                                  var d = new Date();
-                                 var n = d.getMilliseconds();
+                                 //var n = d.getMilliseconds();
                              
                              // // current month
                                  var date_ob = new Date();
@@ -328,6 +328,7 @@ router.get('/self', function(req, res, next) {
                                 
                                     else if(email_address == usernameREQ){
                                         bcrypt.hash(password,saltRounds,function(err,hash){
+                                            var n3 = d.getMilliseconds();
                                             db.query( `UPDATE user_details SET first_name ="${first_name}", last_name = "${last_name}",password = "${hash}", account_updated = "${account_updated}"  WHERE email_address = "${usernameREQ}"`,function(error, results1){
                                            
                                                 if(error){
