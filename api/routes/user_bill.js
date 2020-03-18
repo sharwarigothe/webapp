@@ -177,6 +177,7 @@ const bill={
                         
 
                         else{
+                        logger.info("Bill with id '"+u1+"' inserted successfully");
                         res.status(200).json({message: "Bill inserted",
                         id: u1,
                         created_ts : timestamp,
@@ -193,16 +194,19 @@ const bill={
                     });
                 }
                 else{
+                    logger.error("Please enter valid payment status");
                     res.status(400).json({error: "Enter valid payment status"});
                 }
                     }
                     else{
+                        logger.error("Please enter valid password");
                         res.status(400).json({error: "Password does not match"});
                     }
                 })
 
             }
             else{
+                logger.error("User Does not exist");
                 res.status(400).json({error: "User Does not exist"});
             }
         });
@@ -276,6 +280,9 @@ router.get("/:id",function(req,res){
             }
         });
     }
+    var n1 = d.getMilliseconds();
+    var duration = (n1-n);
+    sdc.timing("Post Bill Time",duration);
 });
 
 
@@ -285,6 +292,8 @@ router.get("/",function(req,res){
 
     var d = new Date();
     var n = d.getMilliseconds();
+    logger.info("BILL_GET LOG");
+    sdc.increment('BILL_GET counter');
 
    //const urlid = req.params.id;
     //console.log(id);
@@ -319,12 +328,10 @@ router.get("/",function(req,res){
                            
                             else{
                                
-                                
+                                logger.info("GET API SUCCESS");
                                 console.log(resulte);
                                 res.status(200).json({message:"all values",
-                                
-
-                                            data : resulte
+                                data : resulte
                                            
                                     
                                      
@@ -337,12 +344,16 @@ router.get("/",function(req,res){
                         });
                     }
                     else{
+                        logger.error("User does not exist");
                         res.status(400).json({error: "User does not exist"});
                     }
                 });
             }
         });
     }
+    var n1 = d.getMilliseconds();
+    var duration = (n1-n);
+    sdc.timing("Get Recipe time",duration);
 });
 
 
@@ -350,6 +361,10 @@ router.get("/",function(req,res){
 
 router.delete("/:id",(req,res)=>{
 
+    var d = new Date();
+    var n = d.getMilliseconds();
+    logger.info("RECIPE_DEL LOG");
+    sdc.increment('RECIPE_DEL counter');
 
     const id=req.params.id;
     console.log("ID:"+id);
@@ -467,9 +482,10 @@ router.delete("/:id",(req,res)=>{
     }
 });
     }
-   
-
-})
+   var n1 = d.getMilliseconds();
+   var duration = (n1-n);
+   sdc.timing("Delete Bill Time",duration);
+});
 
 
 //PUT
@@ -478,6 +494,8 @@ router.put("/:id",function(req,res){
 
     var d = new Date();
     var n = d.getMilliseconds();
+    logger.info("BILL_PUT LOG");
+    sdc.increment('BILL_PUT counter');
   
 
     var date_ob=new Date();
@@ -575,6 +593,7 @@ var updated_ts = timestamp;
                                      
                                 
                                     else{
+                                        logger.info("PUT BILL UPDATED SUCCESSFULLY");
                                         res.status(200).json({
                                             Id : ress[0].id,
                                             created_ts : ress[0].created_ts,
@@ -593,10 +612,12 @@ var updated_ts = timestamp;
                                 });
                             }
                             else{
+                                logger.error("Enter valid payment status");
                                 res.status(400).json({error: "Enter valid payment status"});
                             }
                             }
                             else{
+                                logger.error("Bill not found");
                                 res.status(404).json({error: "Bill not found"});
                             
                             }
@@ -604,12 +625,16 @@ var updated_ts = timestamp;
                     
                     }
                     else{
+                        logger.error("User does not exist");
                         res.status(401).json({error: "User does not exist"});
                     }
                 });
             }
         });
     }
+    var n1 = d.getMilliseconds();
+    var duration = (n1-n);
+    sdc.timing("Put Bill Time",duration);
 });
 
 
@@ -619,7 +644,11 @@ var updated_ts = timestamp;
 
 
 router.post("/:id/file",function(req, res){
-    
+   
+    var d = new Date();
+    var n = d.getMilliseconds();
+    logger.info("BILL_FILE_POST LOG");
+    sdc.increment('BILL_FILE_POST counter');
   //console.log(req.file);
   var meta_data = JSON.stringify(req.file);
  
@@ -777,17 +806,23 @@ const singleupload = upload.single('BillFile');
             }
         });
     }
-
-})
+    var n1 = d.getMilliseconds();
+    var duration = (n1-n);
+    sdc.timing("Post File to S3",duration);
+});
 //GET FILE
 
 router.get("/:billId/file/:fileId",function(req, res){
+
+
+    var d = new Date();
+    var n = d.getMilliseconds();
+    logger.info("RECIPE_IMG_GET LOG");
+    sdc.increment('RECIPE_IMG_GET counter');
+
     console.log(req.file);
     const Billid = req.params.billId;
     const FileId = req.params.fileId;
-
-    
-
     
 
     if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0){
@@ -834,6 +869,7 @@ router.get("/:billId/file/:fileId",function(req, res){
                                        }
                                     else if(fileresults[0].billid == resulte[0].id){
                                         console.log("file belongs to the bill");
+                                        logger.info('FILE receive successfully')
                                         res.status(200).json({
                                         file_name: fileresults[0].file_name,
                                         id: FileId,
@@ -843,7 +879,7 @@ router.get("/:billId/file/:fileId",function(req, res){
                     
                                         }
                                         else{
-                                            console.log("trying if it broke here. the file is not attached to the bill");
+                                            logger.error("Cannot fetch other users file");
                                             res.status(401).json({error: "You cannot fetch file from other bill"});
                                         }
                                     });
@@ -851,7 +887,7 @@ router.get("/:billId/file/:fileId",function(req, res){
                             }
                            
                             else{
-                                console.log("invalud user");
+                                console.log("invalid user");
                                 res.status(401).json({error: "UNAUTHORIZED, Cannot fetch other users file"});
                             }
                           
@@ -870,11 +906,19 @@ router.get("/:billId/file/:fileId",function(req, res){
             }
         });
     }
-
+    var n1 = d.getMilliseconds();
+    var duration = (n1-n);
+    sdc.timing("Get File from S3 Time",duration);
 })
 
 
 router.delete("/:billId/file/:fileId",(req,res)=>{
+
+
+    var d = new Date();
+    var n = d.getMilliseconds();
+    logger.info("BILL_FILE_DEL LOG");
+    sdc.increment('BILL_FILE_DEL counter');
 
     var fs = require('fs');
     
@@ -968,6 +1012,7 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
                                                         throw error;
                                                     }
                                                     else{
+                                                        logger.info("File with id '"+Fileid+"' deleted successfully");
                                                         console.log("file matched with bill id");
                                                         res.status(200).json({ messege:"File DELETED SUCCESSFULLY"})
                                                     }
@@ -1020,9 +1065,11 @@ router.delete("/:billId/file/:fileId",(req,res)=>{
         })
 
     }
-   
+    var n1 = d.getMilliseconds();
+    var duration = (n1-n);
+    sdc.timing("Delete File from S3 Time",duration);
 
-})
+});
 
 
 

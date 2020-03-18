@@ -39,8 +39,6 @@ db.connect((error) =>{
 //CloudWatch
 
 
-
-
 //POST Request
 
 router.post('/', function(req, res, next) {
@@ -240,8 +238,8 @@ router.get('/self', function(req, res, next) {
     //     res.status(200).json({results})
     // })
     var n1 = d.getMilliseconds();
-var duration = (n1-n);
-sdc.timing("Get User Time Duration",duration);
+    var duration = (n1-n);
+    sdc.timing("Get User Time Duration",duration);
     });
 
 
@@ -334,25 +332,14 @@ sdc.timing("Get User Time Duration",duration);
                                            
                                                 if(error){
                                                     throw error
-                                                }
-
-                                                   // console.log(error, results);
-                                                    
+                                                }                                                    
                                                      res.status(200).json({
                                                              message:"User Updated successfully",
-                                                         
-
-                                                           
-                                                               
                                                                 first_name: first_name,
                                                                 LAST_NAME: last_name,
                                                                 EMAIL: results[0].email_address,
                                                                 Created_Time: results[0].account_created,
                                                                 Updated_Time:account_updated
-                               
-                               
-                                                           
-                                                 
                                                          });
                                                         });          
                                                 
@@ -383,10 +370,6 @@ sdc.timing("Get User Time Duration",duration);
         var n1 = d.getMilliseconds();
         var duration = (n1-n);
         sdc.timing("Put User time duration",duration);
-
-        
-        });
-
-
+});
 
 module.exports = router;
