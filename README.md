@@ -39,4 +39,4 @@ This application is build using nodejs and mysql server. To run this application
     - Installed cloudwatch-agent in AMI and linked the policies to it in cloudformation 
     - Used winston to send logs to aws
 
-
+Jmeter folder containing jmx file added to webapp
