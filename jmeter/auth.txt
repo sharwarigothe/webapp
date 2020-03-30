@@ -1,2 +1,2 @@
 # JMeter generated Authorization file
-	gaurigothe100@gmail.com				BASIC
+	gaurigothe100@gmail.com	Gothe@02			BASIC
