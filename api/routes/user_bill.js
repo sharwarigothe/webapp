@@ -49,7 +49,7 @@ aws.config.update({
 
     secretAccessKey: awssecretaccesskey,
     accessKeyId: awsaccesskeyid,
-    region: region
+    region: 'us-east-1'
 });
 
 // const storage = multer.diskStorage({
@@ -507,7 +507,7 @@ router.get("/due/:x",(req,res)=>{
                                         logger.info("entered 1st else");
                                         for (var i = 0; i<a; i++) {
                                             logger.info("entered else loop");
-                                            billLinks[i] = 'https://'+process.env.DomainName+'/v1/bill/'+resultsemail.rows[i].id;
+                                            billLinks[i] = 'https://dev.sharwarigothe.me/v1/bill/'+resultsemail.rows[i].id;
                                             logger.info(recipeLinks[i]+"alalalalalal");
                                         }
                                         let sourceEmail = 'csye6225@dev.sharwarigothe.me';
@@ -521,12 +521,14 @@ router.get("/due/:x",(req,res)=>{
                                         };
                                         payload.data = JSON.stringify(payload.data);
                                         payload = JSON.stringify(payload);
+                                        logger.info("Payload"+payload);
                 
                                         let params = {Message: payload, TopicArn: data.TopicArn}
                                         sns.publish(params, (err, data) => {
                                             if (err) console.log(err)
                                             else {
-                                                console.log('published')
+                                                
+                                                
                                                 res.status(201).json({
                                                     "message": "Reset password link sent on email Successfully!"
                                                 });
