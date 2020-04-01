@@ -22,7 +22,7 @@ const s3 = new aws.S3();
 const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
 const logger = require('../../config/winston');
 var sns = new aws.SNS({});
-
+const abcd= process.env.DomainName;
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
@@ -435,22 +435,25 @@ router.get("/due/:x",(req,res)=>{
                             else{
                                 var a= resultdate.length;
                                     logger.info("gfd "+a);
-                                    console.log("billsvgsfvsvs "+a);
+                                    
                                 let topicParams = {Name: 'EmailTopic'};
                                 sns.createTopic(topicParams, (err, data) => {
+                                    logger.info("entered sns create");
 
                                     global.billLink = "";
                                     var billLinks=[];
-                                    const abcd= process.env.DomainName;
+                                   
                                     logger.info(abcd+"gfdsf");
+
                                     if (err) {
                                         console.log(err);
-                                        logger.error(error);
+                                        logger.error("Entered the error zone");
                                     }
                                 
                                     else{
-                                        logger.info("entered into the else loop");
-                                        for (var i = 0; i <a; i++) {
+
+                                        logger.info("entered into the else loop- success");
+                                        for (var i = 0; i < a; i++) {
                                             
                                             billLinks[i] = 'http://'+dev.sharwarigothe.me+'/v1/bill/'+resultdate.rows[i].id;
                                            
