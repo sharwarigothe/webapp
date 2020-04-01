@@ -499,7 +499,10 @@ router.get("/due/:x",(req,res)=>{
                                     logger.info("entered sns create");
                                     global.billLink = "";
                                     var billLinks=[];
-                                    if (err) console.log(err);
+                                    if (err) {
+                                        console.log(err);
+                                        logger.info("entered error "+err);
+                                    }
                                     else {
                                         logger.info("entered 1st else");
                                         for (var i = 0; i<a; i++) {
