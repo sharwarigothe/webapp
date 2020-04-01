@@ -383,7 +383,7 @@ router.get("/",function(req,res){
 
 //GET BILL DUE EMAIL
 
-router.get("/due",(req,res)=>{
+router.get("/due/",(req,res)=>{
 
    // const x = req.params.x;
     var d = new Date();
