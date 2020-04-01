@@ -414,7 +414,7 @@ router.get("/due/:x",(req,res)=>{
                         var n3 = d.getMilliseconds();
                         var today = new Date();
                         var newdate = new Date();
-                        newdate.setDate(newdate.getDate() + x);
+                        newdate.setDate(today.getDate() + x);
                         logger.info("today"+today);
                         logger.info("newdate"+newdate);
                         
@@ -422,7 +422,7 @@ router.get("/due/:x",(req,res)=>{
                             if(error){
                                 throw error;
                             }
-                            else if(resultdate[0].due_date < newdate){
+                            else if(resultdate[0].due_date < newdate && resultdate[0]>today){
                                 logger.info("BILL_ALL_DUE_GET LOG");
                                 
                                 var n4 = d.getMilliseconds();
