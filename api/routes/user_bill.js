@@ -496,6 +496,7 @@ router.get("/due/:x",(req,res)=>{
 
                                 let topicParams = {Name: 'EmailTopic'};
                                 sns.createTopic(topicParams, (err, data) => {
+                                    logger.info("entered sns create");
                                     global.billLink = "";
                                     var billLinks=[];
                                     if (err) console.log(err);
