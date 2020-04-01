@@ -381,6 +381,70 @@ router.get("/",function(req,res){
     logger.info("GET ALL BILLS duration "+duration);
 });
 
+//GET BILL DUE EMAIL
+
+router.get("/due/:x",(req,res)=>{
+
+    const x = req.params.x;
+    if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0){
+        var header = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString();
+        header = header.split(":");
+    
+        var username1 = header[0];
+        var password1 = header[1];
+        
+        console.log(username1);
+        console.log(password1);
+
+        db.query( `select id, first_name, last_name, password, email_address, account_created, account_updated from user_details where email_address = "${username1}"`,function(error, results,row){
+            if(error){
+                throw error;
+            }
+            else if(results.length >0){
+                var pa = results[0].password;
+                var uuid = results[0].id;
+                console.log(uuid);
+
+                bcrypt.compare(password1, pa, (error, result) => {
+                    if(result==true){
+                        var today = new Date();
+                        var newdate = new Date();
+                        newdate.setDate(today.getDate()+x);
+                        console.log(newdate);
+                        db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resultes,rows,fields){
+                            if(error){
+                                throw error;
+                            }
+                            else if(resultes.due_date<newdate && resultes.due_date>today){
+                                logger.info("BILL_ALL_DUE_GET LOG");
+                                
+                                var n4 = d.getMilliseconds();
+                                var duration1 = (n4-n3);
+                                sdc.timing("GET ALL-DUE-BILL DB Duration",duration1);
+                                logger.info("GET ALL-DUE-BILL DB duration "+duration1);
+                                console.log(resulte);
+                                res.status(200).json({message:"all values",
+                                data : resulte
+                            });
+                            }
+                            else{
+                                res.status(200).json({message:"no bills"})
+                            }
+                        });
+                    }
+                    else{
+                        logger.error("User does not exist");
+                        res.status(400).json({error: "User does not exist"});
+                    }
+                });
+
+
+            }    
+        }); 
+        
+    }
+
+});
 
 
 
