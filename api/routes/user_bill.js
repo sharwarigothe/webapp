@@ -383,9 +383,9 @@ router.get("/",function(req,res){
 
 //GET BILL DUE EMAIL
 
-router.get("/due/:x",(req,res)=>{
+router.get("/due",(req,res)=>{
 
-    const x = req.params.x;
+   // const x = req.params.x;
     var d = new Date();
     var n = d.getMilliseconds();
     logger.info("BILL_ALL_GET LOG");
@@ -411,19 +411,24 @@ router.get("/due/:x",(req,res)=>{
 
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
+
                         var n3 = d.getMilliseconds();
+
                         var today = new Date();
                         var newdate = new Date();
-                        newdate.setDate(today.getDate() + x);
-                        logger.info("today"+today);
-                        logger.info("newdate"+newdate);
+                        newdate.setDate(today.getDate() + 10);
+
+                        logger.info("today: "+today);
+                        logger.info("newdate: "+newdate);
                         
                         db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resultdate,rows,fields){
+                            logger.info("due date: "+resultdate[0].due_date);
                             if(error){
                                 throw error;
                             }
                             else if(resultdate[0].due_date < newdate){
                                 logger.info("BILL_ALL_DUE_GET LOG");
+                                //logger.info("due date: "+resultdate[0].due_date);
                                 
                                 var n4 = d.getMilliseconds();
                                 var duration1 = (n4-n3);
