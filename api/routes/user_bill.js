@@ -386,6 +386,10 @@ router.get("/",function(req,res){
 router.get("/due/:x",(req,res)=>{
 
     const x = req.params.x;
+    var d = new Date();
+    var n = d.getMilliseconds();
+    logger.info("BILL_ALL_GET LOG");
+    sdc.increment('BILL_ALL_GET counter');
     if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0){
         var header = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString();
         header = header.split(":");
