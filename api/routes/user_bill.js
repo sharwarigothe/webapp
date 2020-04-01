@@ -421,13 +421,13 @@ router.get("/due/:x",(req,res)=>{
                         logger.info("today: "+today);
                         logger.info("newdate: "+newdate);
                         
-                        db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resultdate,rows,fields){
-                            logger.info("due date: "+resultdate.due_date);
+                        db.query(`Select * from Bill where owner_id = "${uuid}" AND due_date < "${newdate}"`,function (error,resultdate,rows,fields){
+                            //logger.info("due date: "+resultdate[0].due_date);
                             if(error){
                                 throw error;
                             }
-                            else if(resultdate.due_date < newdate){
-                                
+                            else{
+
                                 logger.info("BILL_ALL_DUE_GET LOG");
                                 //logger.info("due date: "+resultdate[0].due_date);
                                 
@@ -441,9 +441,9 @@ router.get("/due/:x",(req,res)=>{
                                 data : resultdate
                             });
                             }
-                            else{
-                                res.status(200).json({message:"no bills"})
-                            }
+                            // else{
+                            //     res.status(200).json({message:"no bills"})
+                            // }
                         });
                     }
                     else{
