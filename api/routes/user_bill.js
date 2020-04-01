@@ -22,6 +22,7 @@ const s3 = new aws.S3();
 const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
 const logger = require('../../config/winston');
 var sns = new aws.SNS({});
+const abcd= process.env.DomainName;
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
@@ -434,22 +435,23 @@ router.get("/due/:x",(req,res)=>{
                             else{
                                 var a= resultdate.length;
                                     logger.info("gfd "+a);
-                                    console.log("billsvgsfvsvs"+a);
+                                    console.log("billsvgsfvsvs "+a);
                                 let topicParams = {Name: 'EmailTopic'};
                                 sns.createTopic(topicParams, (err, data) => {
 
                                     global.billLink = "";
                                     var billLinks=[];
-                                    var abcd= process.env.DomainName;
-                                    logger.info(abcd+"gfdsf");
+                                    
+                                    logger.info(abcd+ "gfdsf");
                                     if (err) console.log(err);
                                 
                                     else{
+                                        logger.info("entered into the else loop");
                                         for (var i = 0; i <a; i++) {
                                             
                                             billLinks[i] = 'http://'+process.env.DomainName+'/v1/bill/'+resultdate.rows[i].id;
                                            
-                                            logger.info(billLinks[i]+"alalalalalal");
+                                            logger.info(billLinks[i]+" alalalalalal");
                                         }
                                     
                                         var abc = JSON.stringify(billLinks);
