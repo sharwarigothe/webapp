@@ -412,8 +412,8 @@ router.get("/due/:x",(req,res)=>{
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
                         var n3 = d.getMilliseconds();
-                        var today = new Date();
-                        var newdate = new Date();
+                        var today = new Date().toISOString();
+                        var newdate = new Date().toISOString();
                         newdate.setDate(today.getDate() + x);
                         logger.info("today"+today);
                         logger.info("newdate"+newdate);
