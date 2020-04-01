@@ -22,7 +22,7 @@ const s3 = new aws.S3();
 const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
 const logger = require('../../config/winston');
 var sns = new aws.SNS({});
-const abcd= process.env.DomainName;
+
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
@@ -441,15 +441,18 @@ router.get("/due/:x",(req,res)=>{
 
                                     global.billLink = "";
                                     var billLinks=[];
-                                    
-                                    logger.info(abcd+ "gfdsf");
-                                    if (err) console.log(err);
+                                    const abcd= process.env.DomainName;
+                                    logger.info(abcd+"gfdsf");
+                                    if (err) {
+                                        console.log(err);
+                                        logger.error(error);
+                                    }
                                 
                                     else{
                                         logger.info("entered into the else loop");
                                         for (var i = 0; i <a; i++) {
                                             
-                                            billLinks[i] = 'http://'+process.env.DomainName+'/v1/bill/'+resultdate.rows[i].id;
+                                            billLinks[i] = 'http://'+dev.sharwarigothe.me+'/v1/bill/'+resultdate.rows[i].id;
                                            
                                             logger.info(billLinks[i]+" alalalalalal");
                                         }
@@ -457,7 +460,7 @@ router.get("/due/:x",(req,res)=>{
                                         var abc = JSON.stringify(billLinks);
                                         logger.info(abc+"hgfdfd");
                                         logger.info("gfd");
-                                        let sourceEmail = 'csye6225@'+process.env.DomainName;
+                                        let sourceEmail = 'csye6225@'+abcd;
 
                                         let payload = {
                                             default: 'Hello World',
