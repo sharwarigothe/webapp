@@ -409,7 +409,9 @@ router.get("/due/:x",(req,res)=>{
                     if(result==true){
                         var today = new Date();
                         var newdate = new Date();
-                        newdate.setDate(today.getDate()+x);
+                        newdate.setDate(today.getDate() + x);
+                        logger.info("today"+today);
+                        logger.info("newdate"+newdate);
                         console.log(newdate);
                         db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resultes,rows,fields){
                             if(error){
