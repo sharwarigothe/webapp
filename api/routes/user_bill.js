@@ -416,14 +416,14 @@ router.get("/due/:x",(req,res)=>{
 
                         var today = new Date();
                         var newdate = new Date();
-                        newdate.setDate(today.getDate() + nodays).toString();
+                        newdate.setDate(today.getDate() + nodays);
                         newdate1=newdate.toISOString();
 
                         logger.info("today: "+today);
                         logger.info("newdate: "+newdate);
                       //  logger.info("newdate1:"+newdate1);
                         
-                        db.query(`Select * from Bill where owner_id = "${uuid}" AND due_date < '${newdate1}'`,function (error,resultdate,rows,fields){
+                        db.query(`Select * from Bill where owner_id = "${uuid}" AND due_date < '${newdate}'`,function (error,resultdate,rows,fields){
                             //logger.info("due date: "+resultdate[0].due_date);
                             //var a = resultdate.length;
                             //var datanew=[];
