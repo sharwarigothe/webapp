@@ -21,6 +21,7 @@ const multerS3 = require('multer-s3');
 const s3 = new aws.S3();
 const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
 const logger = require('../../config/winston');
+var sns = new aws.SNS({});
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
@@ -423,7 +424,7 @@ router.get("/due/:x",(req,res)=>{
                         logger.info("newdate: "+newdate);
                       //  logger.info("newdate1:"+newdate1);
                         
-                        db.query(`Select * from Bill where owner_id = "${uuid}" AND due_date < '${newdate1}'`,function (error,resultdate,rows,fields){
+                        db.query(`Select id, created_ts, updated_ts, owner_id, vendor, bill_date, due_date, amount_due, categories, paymentStatus from Bill where owner_id = "${uuid}" AND due_date < '${newdate1}'`,function (error,resultdate,rows,fields){
                             //logger.info("due date: "+resultdate[0].due_date);
                             //var a = resultdate.length;
                             //var datanew=[];
@@ -431,9 +432,56 @@ router.get("/due/:x",(req,res)=>{
                                 throw error;
                             }
                             else{
-                                res.status(200).json({
-                                    data:resultdate
-                                })
+                                var a= resultdate.length;
+                                    logger.info("gfd "+a);
+                                    console.log("billsvgsfvsvs"+a);
+                                let topicParams = {Name: 'EmailTopic'};
+                                sns.createTopic(topicParams, (err, data) => {
+
+                                    global.billLink = "";
+                                    var billLinks=[];
+                                    var abcd= process.env.DomainName;
+                                    logger.info(abcd+"gfdsf");
+                                    if (err) console.log(err);
+                                
+                                    else{
+                                        for (var i = 0; i <a; i++) {
+                                            
+                                            billLinks[i] = 'http://'+process.env.DomainName+'/v1/bill/'+resultdate.rows[i].id;
+                                           
+                                            logger.info(billLinks[i]+"alalalalalal");
+                                        }
+                                    
+                                        var abc = JSON.stringify(billLinks);
+                                        logger.info(abc+"hgfdfd");
+                                        logger.info("gfd");
+                                        let sourceEmail = 'csye6225@'+process.env.DomainName;
+
+                                        let payload = {
+                                            default: 'Hello World',
+                                            data: {
+                                                Email: resultsemail.rows[0].email_address,
+                                                link: billLinks,
+                                                sourceE : sourceEmail,
+                                            }
+                                            };
+                                            payload.data = JSON.stringify(payload.data);
+                                            payload = JSON.stringify(payload);
+                                            let params = {Message: payload, TopicArn: data.TopicArn}
+                                            sns.publish(params, (err, data) => {
+                                                if (err) console.log(err)
+                                                else {
+                                                    console.log('published')
+                                                    res.status(200).json({
+                                                        "message": "bill link sent on email Successfully!",
+                                                        "data" : payload.data
+                                                        //data:resultdate
+                                                    })
+                                                }
+                                                })
+                                    
+                            }
+                            })
                                     }
                                    
                                 }         
