@@ -423,30 +423,26 @@ router.get("/due/:x",(req,res)=>{
                         logger.info("newdate: "+newdate);
                       //  logger.info("newdate1:"+newdate1);
                         
-                        db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resultdate,rows,fields){
+                        db.query(`Select * from Bill where owner_id = "${uuid}" AND due_date < '${newdate}'`,function (error,resultdate,rows,fields){
                             //logger.info("due date: "+resultdate[0].due_date);
-                            var a = resultdate.length;
-                            var datanew=[];
+                            //var a = resultdate.length;
+                            //var datanew=[];
                             if(error){
                                 throw error;
                             }
                             else{
-                                //var datadate=[];
-                                for(var i=0;i<a;i++){
-                                    if(resultdate[i].due_date < newdate){
-                                        var datanew = resultdate[i]
-                                        
+                                res.status(200).json({
+                                    data:resultdate
+                                })
                                     }
-                                    res.status(200).json({
-                                            data:datanew
-                                        })
+                                   
                                 }         
                                 
-                            }
+                            
                             // else{
                             //     res.status(200).json({message:"no bills"})
                             // }
-                        });
+                        );
                     }
                     else{
                         logger.error("User does not exist");
