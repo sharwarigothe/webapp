@@ -422,11 +422,12 @@ router.get("/due/:x",(req,res)=>{
                         logger.info("newdate: "+newdate);
                         
                         db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resultdate,rows,fields){
-                            logger.info("due date: "+resultdate[0].due_date);
+                            logger.info("due date: "+resultdate.due_date);
                             if(error){
                                 throw error;
                             }
-                            else if(resultdate[0].due_date < newdate){
+                            else if(resultdate.due_date < newdate){
+                                
                                 logger.info("BILL_ALL_DUE_GET LOG");
                                 //logger.info("due date: "+resultdate[0].due_date);
                                 
