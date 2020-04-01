@@ -430,7 +430,7 @@ router.get("/due/:x",(req,res)=>{
                             }
                             else if(resultdate.length>0){
                                 //var datadate=[];
-                                for(i=0;i<resultdate.length;i++){
+                                for(var i=0;i<resultdate.length;i++){
                                     if(resultdate[i].due_date < newdate1){
                                         res.status(200).json({
                                             data:resultdate[i]
