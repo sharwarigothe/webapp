@@ -417,7 +417,7 @@ router.get("/due/:x",(req,res)=>{
                         var today = new Date();
                         var newdate = new Date();
                         newdate.setDate(today.getDate() + 10);
-                       
+                        
 
                         logger.info("today: "+today);
                         logger.info("newdate: "+newdate);
@@ -431,7 +431,7 @@ router.get("/due/:x",(req,res)=>{
                             else if(resultdate.length>0){
                                 //var datadate=[];
                                 for(var i=0;i<resultdate.length;i++){
-                                    if(resultdate[i].due_date < newdate1){
+                                    if(resultdate[i].due_date < newdate){
                                         res.status(200).json({
                                             data:resultdate[i]
                                         })
