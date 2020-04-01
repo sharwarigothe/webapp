@@ -400,13 +400,13 @@ router.get("/due/:x",(req,res)=>{
         console.log(username1);
         console.log(password1);
 
-        db.query( `select id, first_name, last_name, password, email_address, account_created, account_updated from user_details where email_address = "${username1}"`,function(error, results,row){
+        db.query( `select id, first_name, last_name, password, email_address, account_created, account_updated from user_details where email_address = "${username1}"`,function(error, resultsemail,row){
             if(error){
                 throw error;
             }
-            else if(results.length >0){
-                var pa = results[0].password;
-                var uuid = results[0].id;
+            else if(resultsemail.length >0){
+                var pa = resultsemail[0].password;
+                var uuid = resultsemail[0].id;
                 console.log(uuid);
 
                 bcrypt.compare(password1, pa, (error, result) => {
@@ -415,15 +415,14 @@ router.get("/due/:x",(req,res)=>{
                         var today = new Date();
                         var newdate = new Date();
                         newdate.setDate(today.getDate() + x);
-                        var formatteddate= newdate.toString();
                         logger.info("today"+today);
                         logger.info("newdate"+newdate);
-                        console.log(newdate);
-                        db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resultes,rows,fields){
+                        
+                        db.query(`Select * from Bill where owner_id = "${uuid}"`,function (error,resultdate,rows,fields){
                             if(error){
                                 throw error;
                             }
-                            else if(resultes[0].due_date < formatteddate){
+                            else if(resultdate.due_date < newdate){
                                 logger.info("BILL_ALL_DUE_GET LOG");
                                 
                                 var n4 = d.getMilliseconds();
@@ -431,9 +430,9 @@ router.get("/due/:x",(req,res)=>{
                                 sdc.timing("GET ALL-DUE-BILL DB Duration",duration1);
                                 logger.info("GET ALL-DUE-BILL DB duration "+duration1);
                                 
-                                console.log(resultes);
+                                
                                 res.status(200).json({message:"all values",
-                                data : resultes
+                                data : resultdate
                             });
                             }
                             else{
