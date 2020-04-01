@@ -385,7 +385,7 @@ router.get("/",function(req,res){
 
 router.get("/due/:x",(req,res)=>{
 
-    var x = req.params.x;
+    var nodays = req.params.x;
     var d = new Date();
     var n = d.getMilliseconds();
     logger.info("BILL_ALL_GET LOG");
@@ -416,7 +416,7 @@ router.get("/due/:x",(req,res)=>{
 
                         var today = new Date();
                         var newdate = new Date();
-                        newdate.setDate(today.getDate() + 10);
+                        newdate.setDate(today.getDate() + nodays);
                         newdate1=newdate.toISOString();
 
                         logger.info("today: "+today);
