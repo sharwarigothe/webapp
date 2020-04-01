@@ -414,7 +414,7 @@ router.get("/due/:x",(req,res)=>{
                         var n3 = d.getMilliseconds();
                         var today = new Date();
                         var newdate = new Date();
-                        newdate.setDate(today.getDate() + x);
+                        newdate.setDate(newdate.getDate() + x);
                         logger.info("today"+today);
                         logger.info("newdate"+newdate);
                         
