@@ -27,9 +27,9 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 const db = mysql.createConnection({
     host : host,
-    user : user,
+    user : sharwari,
     password : password,
-    database: 'csye6225'
+    database: 'UserDetails'
 });
 
 //Connect
@@ -384,6 +384,8 @@ router.get("/",function(req,res){
 //GET BILL DUE EMAIL
 
 router.get("/due/:x",(req,res)=>{
+
+    const x = req.params.x;
     if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0){
         var header = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString();
         header = header.split(":");

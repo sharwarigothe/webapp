@@ -16,10 +16,10 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
 
 const db = mysql.createConnection({
-    host : host,
-    user : user,
-    password : password,
-    database: 'csye6225'
+    host : 'localhost',
+    user : 'sharwari',
+    password : 'password',
+    database: 'UserDetails'
 });
 
 //Connect

@@ -11,10 +11,10 @@ const password = process.env.password;
 //Create connection with mysql
 
 const db = mysql.createConnection({
-    host : host,
-    user : user,
-    password : password,
-    database: 'csye6225'
+    host : 'localhost',
+    user : 'sharwari',
+    password : 'password',
+    database: 'UserDetails'
 });
 
 //Connect
