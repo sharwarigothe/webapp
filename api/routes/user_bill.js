@@ -383,9 +383,9 @@ router.get("/",function(req,res){
 
 //GET BILL DUE EMAIL
 
-router.get("/due/",(req,res)=>{
+router.get("/due/:x",(req,res)=>{
 
-   // const x = req.params.x;
+    var x = req.params.x;
     var d = new Date();
     var n = d.getMilliseconds();
     logger.info("BILL_ALL_GET LOG");
@@ -416,7 +416,7 @@ router.get("/due/",(req,res)=>{
 
                         var today = new Date();
                         var newdate = new Date();
-                        newdate.setDate(today.getDate() + 10);
+                        newdate.setDate(today.getDate() + x);
 
                         logger.info("today: "+today);
                         logger.info("newdate: "+newdate);
