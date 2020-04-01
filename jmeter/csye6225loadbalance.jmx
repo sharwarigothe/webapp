@@ -18,7 +18,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1500</stringProp>
+        <stringProp name="ThreadGroup.num_threads">3000</stringProp>
         <stringProp name="ThreadGroup.ramp_time">60</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -44,7 +44,7 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">dev.sharwarigothe.me</stringProp>
+          <stringProp name="HTTPSampler.domain">prod.sharwarigothe.me</stringProp>
           <stringProp name="HTTPSampler.port">80</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -184,7 +184,7 @@
           <collectionProp name="AuthManager.auth_list">
             <elementProp name="" elementType="Authorization">
               <stringProp name="Authorization.url"></stringProp>
-              <stringProp name="Authorization.username">gaurigothe100@gmail.com</stringProp>
+              <stringProp name="Authorization.username">gaurigothe200@gmail.com</stringProp>
               <stringProp name="Authorization.password">Gothe@02</stringProp>
               <stringProp name="Authorization.domain"></stringProp>
               <stringProp name="Authorization.realm"></stringProp>
