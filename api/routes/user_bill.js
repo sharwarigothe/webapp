@@ -416,7 +416,7 @@ router.get("/due/:x",(req,res)=>{
 
                         var today = new Date();
                         var newdate = new Date();
-                        newdate.setDate(today.getDate() + nodays);
+                        newdate.setDate(today.getDate() + Number(nodays));
                         newdate1=newdate.toISOString();
 
                         logger.info("today: "+today);
