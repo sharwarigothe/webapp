@@ -428,9 +428,10 @@ router.get("/due/:x",(req,res)=>{
                                 var duration1 = (n4-n3);
                                 sdc.timing("GET ALL-DUE-BILL DB Duration",duration1);
                                 logger.info("GET ALL-DUE-BILL DB duration "+duration1);
-                                console.log(resulte);
+                                
+                                console.log(resultes);
                                 res.status(200).json({message:"all values",
-                                data : resulte
+                                data : resultes
                             });
                             }
                             else{
