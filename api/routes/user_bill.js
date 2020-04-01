@@ -412,9 +412,10 @@ router.get("/due/:x",(req,res)=>{
                 bcrypt.compare(password1, pa, (error, result) => {
                     if(result==true){
                         var n3 = d.getMilliseconds();
-                        var today = new Date().toISOString();
-                        var newdate = new Date().toISOString();
+                        var today = new Date();
+                        var newdate = new Date();
                         newdate.setDate(today.getDate() + x);
+                        var formatteddate= newdate.toString();
                         logger.info("today"+today);
                         logger.info("newdate"+newdate);
                         console.log(newdate);
@@ -422,7 +423,7 @@ router.get("/due/:x",(req,res)=>{
                             if(error){
                                 throw error;
                             }
-                            else if(resultes[0].due_date < newdate){
+                            else if(resultes[0].due_date < formatteddate){
                                 logger.info("BILL_ALL_DUE_GET LOG");
                                 
                                 var n4 = d.getMilliseconds();
