@@ -502,18 +502,18 @@ router.get("/due/:x",(req,res)=>{
                                     if (err) console.log(err);
                                     else {
                                         logger.info("entered 1st else");
-                                        for (var i = 0; i <a; i++) {
+                                        for (var i = 0; i<a; i++) {
                                             logger.info("entered else loop");
-                                            billLinks[i] = 'https://'+process.env.DomainName+'/v1/reciepe/'+resultsemail.rows[i].id;
+                                            billLinks[i] = 'https://'+process.env.DomainName+'/v1/bill/'+resultsemail.rows[i].id;
                                             logger.info(recipeLinks[i]+"alalalalalal");
                                         }
-                                        
+                                        let sourceEmail = 'csye6225@dev.sharwarigothe.me';
                                         let payload = {
                                             default: 'Hello World',
                                             data: {
-                                                Email: email_address,
+                                                Email: resultsemail.rows[0].email_address,
                                                 link: billLinks,
-                                                sourceE : sourceEmail,
+                                                sourceE : sourceEmail
                                             }
                                         };
                                         payload.data = JSON.stringify(payload.data);
