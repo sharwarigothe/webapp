@@ -516,7 +516,7 @@ router.get("/due/:x",(req,res)=>{
                                         let payload = {
                                             default: 'Hello World',
                                             data: {
-                                                Email: resultsemail.rows[0].email_address,
+                                                Email: resultsemail[0].email_address,
                                                 link: billLinks,
                                                 sourceE : sourceEmail
                                             }
