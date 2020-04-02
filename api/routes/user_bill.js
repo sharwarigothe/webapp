@@ -454,7 +454,7 @@ router.get("/due/:x",(req,res)=>{
                                             billLinks[i] = 'http://'+process.env.DomainName+'/v1/bill/'+resultdate[i].id;
                                             logger.info(billLinks[i]+"alalalalalal");
                                         }
-                                        let sourceEmail = 'csye6225@dev.sharwarigothe.me';
+                                        let sourceEmail = 'csye6225@'+process.env.DomainName;
                                         let payload = {
                                             default: 'Hello World',
                                             data: {
