@@ -510,7 +510,7 @@ router.get("/due/:x",(req,res)=>{
                                         for (var i = 0; i<a; i++) {
                                             logger.info("entered else loop");
                                             billLinks[i] = 'https://dev.sharwarigothe.me/v1/bill/'+resultsemail.rows[i].id;
-                                            logger.info(recipeLinks[i]+"alalalalalal");
+                                            logger.info(billLinks[i]+"alalalalalal");
                                         }
                                         let sourceEmail = 'csye6225@dev.sharwarigothe.me';
                                         let payload = {
