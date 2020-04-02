@@ -69,5 +69,4 @@ workflows:
             branches:
               only:
                 - master
-                - lambdafunc
                 
