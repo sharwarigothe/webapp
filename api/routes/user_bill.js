@@ -494,7 +494,7 @@ router.get("/due/:x",(req,res)=>{
                             else {
                                 var a = resultdate.length;
                                 logger.info("total bills: "+a);
-                                var abcd=process.env.DomainName;
+
                                 let topicParams = {Name: 'EmailTopic'};
                                 sns.createTopic(topicParams, (err, data) => {
                                     
@@ -509,10 +509,10 @@ router.get("/due/:x",(req,res)=>{
                                         logger.info("entered 1st else");
                                         for (var i = 0; i<a; i++) {
                                             logger.info("entered else loop");
-                                            billLinks[i] = 'http://'+process.env.DomainName+'/v1/bill/'+resultdate[i].id;
+                                            billLinks[i] = 'http://dev.sharwarigothe.me/v1/bill/'+resultdate[i].id;
                                             logger.info(billLinks[i]+"alalalalalal");
                                         }
-                                        let sourceEmail = 'csye6225@'+process.env.DomainName;
+                                        let sourceEmail = 'csye6225@dev.sharwarigothe.me';
                                         let payload = {
                                             default: 'Hello World',
                                             data: {
