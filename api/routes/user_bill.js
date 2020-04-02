@@ -21,6 +21,8 @@ const multerS3 = require('multer-s3');
 const s3 = new aws.S3();
 const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
 const logger = require('../../config/winston');
+const dom=process.env.DomainName;
+
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
@@ -44,10 +46,9 @@ db.connect((error) =>{
 });
 
 aws.config.update({
-
     secretAccessKey: awssecretaccesskey,
     accessKeyId: awsaccesskeyid,
-    region: region
+    region:'us-east-1'
 });
 
 // const storage = multer.diskStorage({
@@ -381,6 +382,126 @@ router.get("/",function(req,res){
     logger.info("GET ALL BILLS duration "+duration);
 });
 
+//GET BILL DUE EMAIL
+
+var sns = new aws.SNS({});
+
+router.get("/due/:x",(req,res)=>{
+
+    var nodays = req.params.x;
+    var d = new Date();
+    var n = d.getMilliseconds();
+    logger.info("BILL_ALL_GET LOG");
+    sdc.increment('BILL_ALL_GET counter');
+    if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0){
+        var header = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString();
+        header = header.split(":");
+    
+        var username1 = header[0];
+        var password1 = header[1];
+        
+        console.log(username1);
+        console.log(password1);
+
+        db.query( `select id, first_name, last_name, password, email_address, account_created, account_updated from user_details where email_address = "${username1}"`,function(error, resultsemail,row){
+            if(error){
+                throw error;
+            }
+            else if(resultsemail.length >0){
+                var pa = resultsemail[0].password;
+                var uuid = resultsemail[0].id;
+                console.log(uuid);
+
+                bcrypt.compare(password1, pa, (error, result) => {
+                    if(result==true){
+
+                        var n3 = d.getMilliseconds();
+
+                        var today = new Date();
+                        var newdate = new Date();
+                        newdate.setDate(today.getDate() + Number(nodays));
+                        newdate1=newdate.toISOString();
+
+                        logger.info("today: "+today);
+                        logger.info("newdate: "+newdate);
+                      //  logger.info("newdate1:"+newdate1);
+                        
+                        db.query(`Select id, created_ts, updated_ts, owner_id, vendor, bill_date, due_date, amount_due, categories, paymentStatus from Bill where owner_id = "${uuid}" AND due_date < '${newdate1}'`,function (error,resultdate,rows,fields){
+                            //logger.info("due date: "+resultdate[0].due_date);
+                            //var a = resultdate.length;
+                            //var datanew=[];
+                            if(error){
+                                throw error;
+                            }
+                            else {
+                                var a = resultdate.length;
+                                logger.info("total bills: "+a);
+
+                                let topicParams = {Name: 'EmailTopic'};
+                                sns.createTopic(topicParams, (err, data) => {
+                                    
+                                    // logger.info("entered sns create");
+                                    global.billLink = "";
+                                    var billLinks=[];
+                                    if (err) {
+                                        console.log(err);
+                                        logger.info("entered error "+err);
+                                    }
+                                    else {
+                                        logger.info("entered 1st else");
+                                        for (var i = 0; i<a; i++) {
+                                            logger.info("entered else loop");
+                                            billLinks[i] = 'http://'+process.env.DomainName+'/v1/bill/'+resultdate[i].id;
+                                            logger.info(billLinks[i]+"alalalalalal");
+                                        }
+                                        let sourceEmail = 'csye6225@'+process.env.DomainName;
+                                        let payload = {
+                                            default: 'Hello World',
+                                            data: {
+                                                Email: resultsemail[0].email_address,
+                                                link: billLinks,
+                                                sourceE : sourceEmail
+                                            }
+                                        };
+                                        payload.data = JSON.stringify(payload.data);
+                                        payload = JSON.stringify(payload);
+                                        logger.info("Payload"+payload);
+                
+                                        let params = {Message: payload, TopicArn: data.TopicArn}
+                                        sns.publish(params, (err, data) => {
+                                            if (err) console.log(err);
+                                            else {
+                                                res.status(201).json({
+                                                    "message": "User Bill link sent on email Successfully!"
+                                                });
+                                            }
+                                        })
+                                    }
+                                })
+                
+                            }
+
+                                });     
+                                
+                            
+                            // else{
+                            //     res.status(200).json({message:"no bills"})
+                            // }
+                       
+                    }
+                    else{
+                        logger.error("User does not exist");
+                        res.status(400).json({error: "User does not exist"});
+                    }
+                });
+
+
+            }    
+        }); 
+        
+    }
+
+});
 
 
 
