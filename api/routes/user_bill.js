@@ -46,10 +46,9 @@ db.connect((error) =>{
 });
 
 aws.config.update({
-
     secretAccessKey: awssecretaccesskey,
     accessKeyId: awsaccesskeyid,
-    region: 'us-east-1'
+    region:'us-east-1'
 });
 
 // const storage = multer.diskStorage({
@@ -498,7 +497,8 @@ router.get("/due/:x",(req,res)=>{
 
                                 let topicParams = {Name: 'EmailTopic'};
                                 sns.createTopic(topicParams, (err, data) => {
-                                    logger.info("entered sns create");
+                                    
+                                    // logger.info("entered sns create");
                                     global.billLink = "";
                                     var billLinks=[];
                                     if (err) {
@@ -527,10 +527,8 @@ router.get("/due/:x",(req,res)=>{
                 
                                         let params = {Message: payload, TopicArn: data.TopicArn}
                                         sns.publish(params, (err, data) => {
-                                            if (err) console.log(err)
+                                            if (err) console.log(err);
                                             else {
-                                                
-                                                
                                                 res.status(201).json({
                                                     "message": "Reset password link sent on email Successfully!"
                                                 });
