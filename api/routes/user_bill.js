@@ -21,7 +21,7 @@ const multerS3 = require('multer-s3');
 const s3 = new aws.S3();
 const SDC = require('statsd-client'), sdc = new SDC({host: 'localhost', port: 8125});
 const logger = require('../../config/winston');
-
+const dom=process.env.DomainName;
 
 
 router.use(bodyParser.json());
@@ -433,64 +433,6 @@ router.get("/due/:x",(req,res)=>{
                             if(error){
                                 throw error;
                             }
-                            // else{
-                            //     var a= resultdate.length;
-                            //         logger.info("gfd "+a);
-                                    
-                            //     let topicParams = {Name: 'EmailTopic'};
-                            //     sns.createTopic(topicParams, (err, data) => {
-                            //         logger.info("entered sns create");
-
-                            //         global.billLink = "";
-                            //         var billLinks=[];
-                            //         const abcd = process.env.DomainName;
-                            //         logger.info(abcd+"gfdsf");
-
-                            //         if (err) console.log(err);
-                            //             // logger.error("Entered the error zone");
-                                    
-                            //         else{
-                            //             logger.info("entered into the else loop- success");
-                                        
-                            //             for (var i = 0; i < a; i++) {
-                                            
-                            //                 billLinks[i] = 'http://'+dev.sharwarigothe.me+'/v1/bill/'+resultdate.rows[i].id;
-                                           
-                            //                 logger.info(billLinks[i]+" alalalalalal");
-                            //             }
-                                    
-                            //             var abc = JSON.stringify(billLinks);
-                            //             logger.info(abc+"hgfdfd");
-                            //             logger.info("gfd");
-                            //             let sourceEmail = 'csye6225@'+abcd;
-
-                            //             let payload = {
-                            //                 default: 'Hello World',
-                            //                 data: {
-                            //                     Email: email_address,
-                            //                     link: billLinks,
-                            //                     sourceE : sourceEmail,
-                            //                 }
-                            //                 };
-                            //                 payload.data = JSON.stringify(payload.data);
-                            //                 payload = JSON.stringify(payload);
-                                            
-                            //                 let params = {Message: payload, TopicArn: data.TopicArn}
-                            //                 sns.publish(params, (err, data) => {
-                            //                     if (err) console.log(err)
-                            //                     else {
-                            //                         console.log('published')
-                            //                         res.status(200).json({
-                            //                             "message": "bill link sent on email Successfully!",
-                            //                             "data" : payload.data
-                            //                             //data:resultdate
-                            //                         })
-                            //                     }
-                            //                     })
-                                    
-                            // }
-                            // })
-                            //         }
                             else {
                                 var a = resultdate.length;
                                 logger.info("total bills: "+a);
@@ -509,7 +451,7 @@ router.get("/due/:x",(req,res)=>{
                                         logger.info("entered 1st else");
                                         for (var i = 0; i<a; i++) {
                                             logger.info("entered else loop");
-                                            billLinks[i] = 'http://dev.sharwarigothe.me/v1/bill/'+resultdate[i].id;
+                                            billLinks[i] = 'http://'+process.env.DomainName+'/v1/bill/'+resultdate[i].id;
                                             logger.info(billLinks[i]+"alalalalalal");
                                         }
                                         let sourceEmail = 'csye6225@dev.sharwarigothe.me';
